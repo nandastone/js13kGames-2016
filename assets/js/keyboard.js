@@ -1,4 +1,7 @@
 var keyboard = {
+    __down: {},
+    __preserved: {},
+
     codes: {
         UP:     38,
         DOWN:   40,
@@ -19,31 +22,30 @@ var keyboard = {
         NUM8:   104,
         NUM9:   105
     },
-    __keys: {},
 
     init: function () {
         var self = this;
 
         document.addEventListener( 'keydown', function ( _event ) {
-            for ( key in self.codes ) {
-                if ( self.codes[ key ] === _event.keyCode) {
-                    self.__keys[ self.codes[ key ] ] = true;
-                    break;
-                }
-            }
+            self.__down[ _event.keyCode ] = true;
+            self.__preserved[ _event.keyCode ] = true;
         } );
 
         document.addEventListener( 'keyup', function ( _event ) {
-            for ( key in self.codes ) {
-                if ( self.codes[ key ] === _event.keyCode) {
-                    self.__keys[ self.codes[ key ] ] = false;
-                    break;
-                }
-            }
+            delete self.__down[ _event.keyCode ];
         } );
     },
 
     isKeyDown: function ( _key ) {
-        return this.__keys[ _key ];
+        return this.__down[ _key ];
+    },
+
+    isKeyPreserved: function ( _key ) {
+        if ( typeof this.__preserved[ _key ] !== 'undefined' ) {
+            delete this.__preserved[ _key ];
+            return true;
+        }
+
+        return false;
     }
 };

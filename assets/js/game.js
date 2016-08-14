@@ -1,11 +1,29 @@
 var game = {
+    __els: {},
     __bodies: [],
+
+    init: function () {
+        var self = this;
+
+        this.__els.tick = document.getElementById( 'tick' );
+        this.__els.play = document.getElementById( 'play' );
+
+        this.__els.tick.addEventListener( 'click', function ( _event ) {
+            self.play( false );
+        } );
+
+        this.__els.play.addEventListener( 'click', function ( _event ) {
+            self.play( true );
+        } );
+    },
     
-    play: function() {
+    play: function ( _continue ) {
+        if ( typeof _continue === 'undefined' ) _continue = true;
+
         game.update();
         game.render();
 
-        window.requestAnimationFrame( game.play );
+        if ( _continue ) window.requestAnimationFrame( game.play );
     },
 
     update: function() {
@@ -33,6 +51,7 @@ var game = {
 
 keyboard.init();
 
+game.init();
 game.addBody( map );
 game.addBody( player );
-game.play();
+// game.play();

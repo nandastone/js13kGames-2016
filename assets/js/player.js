@@ -1,7 +1,5 @@
 var player = {
     __tempPos: null,
-    // limit to one movement per keypress
-    __canMove: true,
 
     init: function () {
         this.w = 10;
@@ -42,21 +40,19 @@ var player = {
     },
 
     __detectMovement: function () {
-        if ( !this.__canMove ) return;
-
-        // @todo Set __canMove when pressing key, unset when releasing key.
-
-        if ( keyboard.isKeyDown( keyboard.codes.NUM7 ) ) {            
+        if ( keyboard.isKeyPreserved( keyboard.codes.NUM7 ) ) {            
             this.move( hex.directions.NORTHWEST );
-        } else if ( keyboard.isKeyDown( keyboard.codes.NUM9 ) ) {
+        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM9 ) ) {
             this.move( hex.directions.NORTHEAST );
-        } else if ( keyboard.isKeyDown( keyboard.codes.NUM6 ) ) {
+        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM6 ) ||
+                    keyboard.isKeyPreserved( keyboard.codes.RIGHT ) ) {
             this.move( hex.directions.EAST );
-        } else if ( keyboard.isKeyDown( keyboard.codes.NUM3 ) ) {
+        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM3 ) ) {
             this.move( hex.directions.SOUTHEAST );
-        } else if ( keyboard.isKeyDown( keyboard.codes.NUM1 ) ) {
+        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM1 ) ) {
             this.move( hex.directions.SOUTHWEST );
-        } else if ( keyboard.isKeyDown( keyboard.codes.NUM4 ) ) {
+        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM4 ) ||
+                    keyboard.isKeyPreserved( keyboard.codes.LEFT ) ) {
             this.move( hex.directions.WEST );
         }
     }
