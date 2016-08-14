@@ -31,6 +31,8 @@ var game = {
     }
 };
 
+keyboard.init();
+
 game.addBody( map );
 game.addBody( player );
 game.play();
