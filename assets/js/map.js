@@ -1,7 +1,10 @@
 var map = {
-    update: function () {
-
+    init: function () {
+        this.width = this.w = canvas.width;
+        this.height = this.h = canvas.height;
     },
+
+    update: function () {},
 
     render: function () {
         canvas.ctx.fillStyle = 'black';

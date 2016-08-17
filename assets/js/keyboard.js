@@ -1,6 +1,7 @@
 var keyboard = {
     __down: {},
     __preserved: {},
+    __released: {},
 
     codes: {
         UP:     38,
@@ -32,6 +33,7 @@ var keyboard = {
         } );
 
         document.addEventListener( 'keyup', function ( _event ) {
+            self.__released[ _event.keyCode ] = true;
             delete self.__down[ _event.keyCode ];
         } );
     },
@@ -43,6 +45,15 @@ var keyboard = {
     isKeyPreserved: function ( _key ) {
         if ( typeof this.__preserved[ _key ] !== 'undefined' ) {
             delete this.__preserved[ _key ];
+            return true;
+        }
+
+        return false;
+    },
+
+    isKeyReleased: function ( _key ) {
+        if ( typeof this.__released[ _key ] !== 'undefined' ) {
+            delete this.__released[ _key ];
             return true;
         }
 
