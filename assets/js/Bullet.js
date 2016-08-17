@@ -45,6 +45,8 @@ Bullet.prototype.update = function () {
 };
 
 Bullet.prototype.render = function () {
+    canvas.ctx.save();
     canvas.ctx.fillStyle = 'red';
     canvas.ctx.fillRect( this.x, this.y, this.width, this.height );
+    canvas.ctx.restore();
 };

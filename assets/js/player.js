@@ -3,7 +3,7 @@ var player = {
         this.width = this.w = 27;
         this.height = this.h = 37;
         this.x = ( canvas.width / 2 ) - ( this.w / 2 ); 
-        this.y = canvas.height - this.h; 
+        this.y = canvas.height - 100; 
         this.speedx = 3;
         this.speedy = 4;
         this.sprite = {};
@@ -25,8 +25,10 @@ var player = {
         } else if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
             sprite = this.sprite.right;
         }
-
+        
+        canvas.ctx.save();
         canvas.ctx.drawImage( sprite, this.x, this.y, this.w, this.h );
+        canvas.ctx.restore();
     },
 
     shoot: function () {

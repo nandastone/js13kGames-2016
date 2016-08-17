@@ -1,19 +1,33 @@
 /**
- * 1. Add 2nd level of background layer (parallax).
+ * 1. 
  */
 
 var game = {
+    MS_PER_FRAME: ( 1000 / 60 ),
+
     __bodies: [],
 
     init: function () {},
     
     play: function ( _continue ) {
-        if ( typeof _continue === 'undefined' ) _continue = true;
+        var self = this,
+            timeStart, timeEnd;
+
+        timeStart = performance.now();
 
         game.update();
         game.render();
 
-        if ( _continue ) window.requestAnimationFrame( game.play );
+        timeEnd = performance.now();
+
+        ui.updateMs( timeEnd - timeStart );
+        ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
+
+        if ( _continue || typeof _continue === 'undefined' ) {
+            window.setTimeout( function() {
+                window.requestAnimationFrame( function() { game.play.call( self ); } );
+            }, game.MS_PER_FRAME - ( timeEnd - timeStart ) );
+        }
     },
 
     update: function() {
@@ -50,6 +64,10 @@ var game = {
                 self.__bodies.splice( _k, 1 );
             }
         } );
+    },
+
+    __calculateFps: function ( _delta ) {
+        return 1000 / utils.clamp( _delta, game.MS_PER_FRAME, 1000 );
     }
 };
 
