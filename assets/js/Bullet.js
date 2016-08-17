@@ -15,7 +15,7 @@ var Bullet = function ( _pos, _alignment ) {
     this.y = _pos.y;
     this.width = this.w = 5;
     this.height = this.h = 5;
-    this.speedy = -7;
+    this.speedy = -10;
     this.speedx = 0;
 
     // @todo How do centered co-ordinate systems work?
