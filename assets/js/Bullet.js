@@ -15,7 +15,7 @@ var Bullet = function ( _pos, _alignment ) {
     this.y = _pos.y;
     this.width = this.w = 5;
     this.height = this.h = 5;
-    this.speedy = -8;
+    this.speedy = -7;
     this.speedx = 0;
 
     // @todo How do centered co-ordinate systems work?
@@ -32,11 +32,11 @@ Bullet.prototype.update = function () {
     // if bullet leaves stage, destroy it
     if ( 
         // off left of screen
-        ( ( this.x - this.width ) < 0 ) ||
+        ( ( this.x + this.width ) < 0 ) ||
         // off right of screen
         ( this.x > map.width ) || 
         // off top of screen
-        ( ( this.y - this.height ) < 0 ) ||
+        ( ( this.y + this.height ) < 0 ) ||
         // off bottom of screen
         ( this.y > map.height ) ) {
         
