@@ -2,15 +2,12 @@ var player = {
     __tempPos: null,
 
     init: function () {
-        this.w = 10;
-        this.h = 10;
-        this.pos = { x: 0, y: 0 };
-
-        // @temp Until proper system for tracking current position on map.
-        this.__tempPos = map.__map[ 0 ][ 0 ];
-
-        // @temp Until proper position initialisation.
-        this.move();
+        this.width = this.w = 10;
+        this.height = this.h = 20;
+        this.x = ( canvas.width / 2 ) - ( this.w / 2 ); 
+        this.y = ( canvas.height / 2 ) - ( this.h / 2 ); 
+        this.speedx = 4;
+        this.speedy = 3;
     },
 
     update: function () {
@@ -18,42 +15,44 @@ var player = {
     },
 
     render: function () {
-        canvas.ctx.fillStyle = 'black';
-        canvas.ctx.fillRect( this.pos.x, this.pos.y, this.w, this.h );
-    },
-
-    move: function ( _direction ) {
-        var current = map.pxToTile( this.pos );
-        // @temp Until above method works.
-        current = this.__tempPos;
-        var destination = map.tileNeighbour( current, _direction );
-
-        if ( !destination ) {
-            console.error( 'Cannot move to that tile.' );
-        } else {
-            this.__tempPos = destination;
-            this.pos = map.tileToPx( destination );
-            // @temp Hacked centering to tile.
-            this.pos = { x: this.pos.x + 20, y: this.pos.y + 20 };
-            // @todo Do whatever happens when you move to a new tile!
-        }
+        // rocket ship body
+        canvas.ctx.fillStyle = 'green';
+        canvas.ctx.fillRect( this.x, this.y, this.w, this.h );
     },
 
     __detectMovement: function () {
-        if ( keyboard.isKeyPreserved( keyboard.codes.NUM7 ) ) {            
-            this.move( hex.directions.NORTHWEST );
-        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM9 ) ) {
-            this.move( hex.directions.NORTHEAST );
-        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM6 ) ||
-                    keyboard.isKeyPreserved( keyboard.codes.RIGHT ) ) {
-            this.move( hex.directions.EAST );
-        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM3 ) ) {
-            this.move( hex.directions.SOUTHEAST );
-        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM1 ) ) {
-            this.move( hex.directions.SOUTHWEST );
-        } else if ( keyboard.isKeyPreserved( keyboard.codes.NUM4 ) ||
-                    keyboard.isKeyPreserved( keyboard.codes.LEFT ) ) {
-            this.move( hex.directions.WEST );
+        if ( keyboard.isKeyDown( keyboard.codes.LEFT ) ) {
+            this.x = utils.clamp( 
+                this.x - this.speedx, 
+                0, 
+                canvas.width - this.width
+            );
         }
-    }
+
+        if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
+            this.x = utils.clamp( 
+                this.x + this.speedx, 
+                0, 
+                canvas.width - this.width
+            );
+        }
+
+        if ( keyboard.isKeyDown( keyboard.codes.UP ) ) {
+            this.y = utils.clamp( 
+                this.y - this.speedy, 
+                0, 
+                canvas.height - this.height
+            );
+        }
+
+        if ( keyboard.isKeyDown( keyboard.codes.DOWN ) ) {
+            this.y = utils.clamp( 
+                this.y + this.speedy, 
+                0, 
+                canvas.height - this.height
+            );
+        }
+    },
+
+
  };

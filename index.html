@@ -2,18 +2,24 @@
 
 <head>
     <title>Explorer</title>
+    <link href="assets/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
     <h1>Explorer</h1>
 
-    <canvas id="stage" width="640" height="480"></canvas>
-    <button id="tick">Tick</button>
-    <button id="play">Play</button>
+    <aside class="sidebar">
+        <button id="tick">Tick</button>
+        <button id="play">Play</button>
+    </aside>
 
-    <script src="assets/js/utilities.js"></script>
+    <main class="content">
+        <canvas id="stage" width="640" height="480"></canvas>
+    </main>
+
+    <script src="assets/js/utils.js"></script>
     <script src="assets/js/canvas.js"></script>
-    <script src="assets/js/hex.js"></script>
+    <script src="assets/js/ui.js"></script>
     <script src="assets/js/map.js"></script>
     <script src="assets/js/player.js"></script>
     <script src="assets/js/keyboard.js"></script>

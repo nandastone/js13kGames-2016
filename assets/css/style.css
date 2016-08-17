@@ -1,0 +1,17 @@
+* {
+    box-sizing: content-box;
+}
+
+.sidebar {
+
+    background: grey;
+    float: left;
+    margin-right: 2em;
+    padding: 2em 3em;
+    width: 6em;
+}
+
+.content {
+
+    float: left;
+}
