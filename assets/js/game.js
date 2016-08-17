@@ -1,8 +1,5 @@
 /**
- * 1. Allow shooting to create bullet objects.
- * 2. Track bullet objects in memory.
- * 3. When bullet objects leave the stage, clean them up.
- * 4. Add 2nd level of background layer (parallax).
+ * 1. Add 2nd level of background layer (parallax).
  */
 
 var game = {

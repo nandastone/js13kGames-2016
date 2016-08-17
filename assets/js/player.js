@@ -1,7 +1,7 @@
 var player = {
     init: function () {
-        this.width = this.w = 10;
-        this.height = this.h = 20;
+        this.width = this.w = 20;
+        this.height = this.h = 30;
         this.x = ( canvas.width / 2 ) - ( this.w / 2 ); 
         this.y = canvas.height - this.h; 
         this.speedx = 3;
