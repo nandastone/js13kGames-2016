@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.player = {
     init: function () {
         this.z = 10;

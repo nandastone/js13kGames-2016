@@ -1,0 +1,11 @@
+{
+  "name": "glitchspace",
+  "version": "0.0.1",
+  "description": "Entry for js13kGames 2016",
+  "dependencies": {
+    "eslint": "^3.3.1"
+  },
+  "devDependencies": {},
+  "author": "Matt Stone",
+  "license": "ISC"
+}

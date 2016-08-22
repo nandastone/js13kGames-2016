@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.enemy = {
     BASIC: {
         width: 20,

@@ -1,5 +1,9 @@
+/* global glitch */
+
 /**
- * 1. 
+ * 1. Add bullet col detection for enemies.
+ * 2. Reduce enemy hp if bullet collide.
+ * 3. Show little explosion for bullet if enemy collide.
  */
 
 glitch.game = {
@@ -33,7 +37,7 @@ glitch.game = {
     update: function() {
         this.__sortBodies();
 
-        this.__bodies.forEach( function ( _v, _k ) {
+        this.__bodies.forEach( function ( _v ) {
             if ( typeof _v.update !== 'undefined' ) {
                 _v.update();
             }
@@ -43,7 +47,7 @@ glitch.game = {
     render: function() {
         glitch.canvas.ctx.clearRect( 0, 0, glitch.canvas.width, glitch.canvas.height );
 
-        this.__bodies.forEach( function ( _v, _k ) {
+        this.__bodies.forEach( function ( _v ) {
             if ( typeof _v.render !== 'undefined' ) {
                 _v.render();
             }

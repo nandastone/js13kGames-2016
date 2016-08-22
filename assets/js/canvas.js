@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.canvas = ( function () {
     var el = document.getElementById( 'stage' );
     

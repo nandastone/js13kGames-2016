@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.bullet = {
     position: {
         LEFT: 1,
@@ -21,7 +23,7 @@ var Bullet = function ( _pos, _alignment ) {
     };
 
     // @todo How do centered co-ordinate systems work?
-    if ( _alignment = glitch.bullet.position.CENTER ) {
+    if ( _alignment === glitch.bullet.position.CENTER ) {
         this.pos.x = this.pos.x - ( this.width / 2 );
         this.pos.y = this.pos.y - ( this.height / 2 );
     }

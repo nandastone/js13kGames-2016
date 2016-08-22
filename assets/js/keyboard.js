@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.keyboard = {
     __down: {},
     __preserved: {},

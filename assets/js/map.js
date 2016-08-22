@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.map = {
     NUM_ENEMIES: 20,
     ENEMY_FREQUENCY: 100,
@@ -19,15 +21,15 @@ glitch.map = {
 
         this.__frame += 1;
 
-        this.__stars.forEach( function ( _v, _k ) {
-            _v.pos.y = _v.pos.y + _v.speed;
-            if ( _v.pos.y > _v.canvas.height ) _v.pos.y = 0;
+        this.__stars.forEach( function ( _star ) {
+            _star.pos.y = _star.pos.y + _star.speed;
+            if ( _star.pos.y > _star.canvas.height ) _star.pos.y = 0;
         } );
 
-        this.__enemies.forEach( function ( _v, _k ) {
-            if ( !_v.active && _v.activeAt <=  self.__frame ) {
-                _v.active = true;
-                glitch.game.addBody( _v );
+        this.__enemies.forEach( function ( _enemy ) {
+            if ( !_enemy.active && _enemy.activeAt <=  self.__frame ) {
+                _enemy.active = true;
+                glitch.game.addBody( _enemy );
             }
         } );
     },
@@ -65,23 +67,23 @@ glitch.map = {
         this.__stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0,
-            canvas: this.__createStarsCanvas( 40, 1 )
+            canvas: this.__createStarfieldCanvas( 40, 1 )
         } );
 
         this.__stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0.1,
-            canvas: this.__createStarsCanvas( 30, 2 )
+            canvas: this.__createStarfieldCanvas( 30, 2 )
         } );
 
         this.__stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0.3,
-            canvas: this.__createStarsCanvas( 10, 2.5 )
+            canvas: this.__createStarfieldCanvas( 10, 2.5 )
         } );
     },
 
-    __createStarsCanvas: function ( _number, _size ) {
+    __createStarfieldCanvas: function ( _number, _size ) {
         var newCanvas = document.createElement( 'canvas' );
         var newCtx = newCanvas.getContext( '2d' );
 
@@ -96,6 +98,7 @@ glitch.map = {
             newCtx.save();
             newCtx.translate( x, y );
             newCtx.scale( _size, _size );
+            // @todo Instead of alpha, tweak colors of stars brighter/cooler.
             newCtx.globalAlpha = glitch.utils.clamp( Math.random(), 0.5, 1 );
 
             // draw star shape
@@ -114,21 +117,21 @@ glitch.map = {
     },
 
     __renderStars: function () {
-        this.__stars.forEach( function ( _v, _k ) { 
+        this.__stars.forEach( function ( _starfield ) { 
             glitch.canvas.ctx.drawImage( 
-                _v.canvas, 
+                _starfield.canvas, 
                 0, 
-                _v.pos.y, 
-                _v.canvas.width, 
-                _v.canvas.height 
+                _starfield.pos.y, 
+                _starfield.canvas.width, 
+                _starfield.canvas.height 
             );
 
             glitch.canvas.ctx.drawImage( 
-                _v.canvas, 
+                _starfield.canvas, 
                 0, 
-                _v.pos.y  - _v.canvas.height, 
-                _v.canvas.width, 
-                _v.canvas.height 
+                _starfield.pos.y  - _starfield.canvas.height, 
+                _starfield.canvas.width, 
+                _starfield.canvas.height 
             );
         } );
     }

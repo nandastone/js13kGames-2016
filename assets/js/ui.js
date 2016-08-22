@@ -1,3 +1,5 @@
+/* global glitch */
+
 glitch.ui = {
     __els: {},
     __playing: false,
