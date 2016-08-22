@@ -1,10 +1,11 @@
 /* global glitch */
 
 /**
- * 1. Show little explosion for bullet if enemy collide.
- * 2. If enemy dead, show explosion.
- * 3. For bullet and enemy explosion, play animation.
+ * 1. Detect enemy collision with player.
+ * 2. Damage enemy and player on collide.
+ * 3. Player death detection + explosion animation.
  * 4. How to schedule level of enemies in particular pattern?
+ * 5. Improve death animation code to not be so heavily tied into update/render.
  */
 
 glitch.game = {
