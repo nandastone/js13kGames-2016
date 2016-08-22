@@ -1,60 +1,80 @@
 var player = {
     init: function () {
+        this.z = 10;
         this.width = this.w = 27;
         this.height = this.h = 37;
-        this.x = ( canvas.width / 2 ) - ( this.w / 2 ); 
-        this.y = canvas.height - 100; 
-        this.speedx = 3;
-        this.speedy = 4;
+        this.pos = {
+            x: ( canvas.width / 2 ) - ( this.w / 2 ),
+            y: canvas.height - 100
+        };
+        this.speed = { x: 3, y: 4 };
+        this.velocity = { x: 0, y: 0 };
         this.sprite = {};
+        this.shootDelay = 0; 
         
-        this.__initSprite();
+        this.initSprite();
     },
 
     update: function () {
-        this.__detectKeys();
+        this.shootDelay += 1;
+
+        // detect player actions via keyboard input
+        this.detectKeys();
+
+        // update position of player based on input
+        this.pos = {
+            x: utils.clamp( 
+                this.pos.x + this.velocity.x, 
+                0, 
+                map.width - this.width
+            ),
+            y: utils.clamp( 
+                this.pos.y + this.velocity.y, 
+                0, 
+                map.height - this.height
+            ) 
+        };
     },
 
     render: function () {
         var sprite = this.sprite.normal;
 
-        // http://www.gsarchives.net/index2.php?category=sprites&system=computer&game=raptor&type=sprites&level0=non-animated
         // @todo How to animate turning left over a number of ticks?
-        if ( keyboard.isKeyDown( keyboard.codes.LEFT ) ) {
+        if ( this.velocity.x < 0 ) {
             sprite = this.sprite.left;
-        } else if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
+        } else if ( this.velocity.x > 0 ) {
             sprite = this.sprite.right;
         }
         
         canvas.ctx.save();
-        canvas.ctx.drawImage( sprite, this.x, this.y, this.w, this.h );
+        canvas.ctx.drawImage( sprite, this.pos.x, this.pos.y, this.w, this.h );
         canvas.ctx.restore();
     },
 
     shoot: function () {
         var b1 = bullet.create( { 
-            x: this.x + 2, 
-            y: this.y + 20
+            x: this.pos.x + 2, 
+            y: this.pos.y + 20
         }, bullet.position.CENTER );
 
         var b2 = bullet.create( { 
-            x: this.x + ( this.width - 2), 
-            y: this.y + 20
+            x: this.pos.x + ( this.width - 2), 
+            y: this.pos.y + 20
         }, bullet.position.CENTER );
 
-        // @todo Implement stacking index so bullets are always rendered below ship.
         game.addBody( b1 );
         game.addBody( b2 );
     },
 
     // @todo Investigate sprite maps and animating them.
-    __initSprite: function () {
+    initSprite: function () {
         var normal = new Image();
         var left = new Image();
         var left2 = new Image();
         var right = new Image();
         var right2 = new Image();
 
+        // http://www.gsarchives.net/index2.php?category=sprites&system=computer&game=raptor&type=sprites&level0=non-animated
         normal.src = 'assets/img/plane.gif';
         left.src = 'assets/img/plane_turning_right_1.gif';
         left2.src = 'assets/img/plane_turning_right_2.gif';
@@ -70,43 +90,39 @@ var player = {
         };
     },
 
-    __detectKeys: function () {
+    detectKeys: function () {
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
         if ( keyboard.isKeyDown( keyboard.codes.SPACE ) ) {
-            // @todo Limit the rate of fire.
-            this.shoot();
+            if ( this.canShoot() ) {
+                this.shoot();
+            }
         }
 
         if ( keyboard.isKeyDown( keyboard.codes.LEFT ) ) {
-            this.x = utils.clamp( 
-                this.x - this.speedx, 
-                0, 
-                map.width - this.width
-            );
+            this.velocity.x = -this.speed.x;
         }
 
         if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
-            this.x = utils.clamp( 
-                this.x + this.speedx, 
-                0, 
-                map.width - this.width
-            );
+            this.velocity.x = this.speed.x;
         }
 
         if ( keyboard.isKeyDown( keyboard.codes.UP ) ) {
-            this.y = utils.clamp( 
-                this.y - this.speedy, 
-                0, 
-                map.height - this.height
-            );
+            this.velocity.y = -this.speed.x;
         }
 
         if ( keyboard.isKeyDown( keyboard.codes.DOWN ) ) {
-            this.y = utils.clamp( 
-                this.y + this.speedy, 
-                0, 
-                map.height - this.height
-            );
+            this.velocity.y = this.speed.x;
         }
-    }
+    },
 
+    canShoot: function () {
+        if ( this.shootDelay < 10 ) {
+            return false;
+        }
+
+        this.shootDelay = 0;
+        return true;
+    }
  };

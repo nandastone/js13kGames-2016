@@ -11,34 +11,36 @@ var bullet = {
 };
 
 var Bullet = function ( _pos, _alignment ) {
-    this.x = _pos.x;
-    this.y = _pos.y;
+    this.z = 5;
+    this.pos = _pos;
     this.width = this.w = 5;
     this.height = this.h = 5;
-    this.speedy = -10;
-    this.speedx = 0;
+    this.speed = {
+        y: -10,
+        x: 0
+    };
 
     // @todo How do centered co-ordinate systems work?
     if ( _alignment = bullet.position.CENTER ) {
-        this.x = this.x - ( this.width / 2 );
-        this.y = this.y - ( this.height / 2 );
+        this.pos.x = this.pos.x - ( this.width / 2 );
+        this.pos.y = this.pos.y - ( this.height / 2 );
     }
 };
 
 Bullet.prototype.update = function () {
-    this.x = this.x + this.speedx;
-    this.y = this.y + this.speedy;
+    this.pos.x = this.pos.x + this.speed.x;
+    this.pos.y = this.pos.y + this.speed.y;
 
     // if bullet leaves stage, destroy it
     if ( 
         // off left of screen
-        ( ( this.x + this.width ) < 0 ) ||
+        ( ( this.pos.x + this.width ) < 0 ) ||
         // off right of screen
-        ( this.x > map.width ) || 
+        ( this.pos.x > map.width ) || 
         // off top of screen
-        ( ( this.y + this.height ) < 0 ) ||
+        ( ( this.pos.y + this.height ) < 0 ) ||
         // off bottom of screen
-        ( this.y > map.height ) ) {
+        ( this.pos.y > map.height ) ) {
         
         game.removeBody( this );
     }
@@ -47,6 +49,6 @@ Bullet.prototype.update = function () {
 Bullet.prototype.render = function () {
     canvas.ctx.save();
     canvas.ctx.fillStyle = 'red';
-    canvas.ctx.fillRect( this.x, this.y, this.width, this.height );
+    canvas.ctx.fillRect( this.pos.x, this.pos.y, this.width, this.height );
     canvas.ctx.restore();
 };

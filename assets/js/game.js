@@ -31,6 +31,7 @@ var game = {
     },
 
     update: function() {
+        this.__sortBodies();
         this.__bodies.forEach( function ( _v, _k ) {
             if ( typeof _v.update !== 'undefined' ) {
                 _v.update();
@@ -53,6 +54,8 @@ var game = {
             _body.init();
         }
 
+        if ( !_body.z ) _body.z = 0;
+
         this.__bodies.push( _body );
     },
 
@@ -68,6 +71,12 @@ var game = {
 
     __calculateFps: function ( _delta ) {
         return 1000 / utils.clamp( _delta, game.MS_PER_FRAME, 1000 );
+    },
+
+    __sortBodies: function () {
+        this.__bodies.sort( function ( _a, _b ) { 
+            return _a.z - _b.z;
+        } );
     }
 };
 
