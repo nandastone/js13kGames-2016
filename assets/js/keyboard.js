@@ -1,4 +1,4 @@
-var keyboard = {
+glitch.keyboard = {
     __down: {},
     __preserved: {},
     __released: {},

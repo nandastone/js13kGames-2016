@@ -2,7 +2,7 @@
  * 1. 
  */
 
-var game = {
+glitch.game = {
     MS_PER_FRAME: ( 1000 / 60 ),
 
     __bodies: [],
@@ -15,23 +15,24 @@ var game = {
 
         timeStart = performance.now();
 
-        game.update();
-        game.render();
+        this.update();
+        this.render();
 
         timeEnd = performance.now();
 
-        ui.updateMs( timeEnd - timeStart );
-        ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
+        glitch.ui.updateMs( timeEnd - timeStart );
+        glitch.ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
 
         if ( _continue || typeof _continue === 'undefined' ) {
             window.setTimeout( function() {
-                window.requestAnimationFrame( function() { game.play.call( self ); } );
-            }, game.MS_PER_FRAME - ( timeEnd - timeStart ) );
+                window.requestAnimationFrame( function () { self.play.call( self ); } );
+            }, this.MS_PER_FRAME - ( timeEnd - timeStart ) );
         }
     },
 
     update: function() {
         this.__sortBodies();
+
         this.__bodies.forEach( function ( _v, _k ) {
             if ( typeof _v.update !== 'undefined' ) {
                 _v.update();
@@ -40,7 +41,7 @@ var game = {
     },
 
     render: function() {
-        canvas.ctx.clearRect( 0, 0, canvas.w, canvas.h );
+        glitch.canvas.ctx.clearRect( 0, 0, glitch.canvas.width, glitch.canvas.height );
 
         this.__bodies.forEach( function ( _v, _k ) {
             if ( typeof _v.render !== 'undefined' ) {
@@ -70,7 +71,7 @@ var game = {
     },
 
     __calculateFps: function ( _delta ) {
-        return 1000 / utils.clamp( _delta, game.MS_PER_FRAME, 1000 );
+        return 1000 / glitch.utils.clamp( _delta, this.MS_PER_FRAME, 1000 );
     },
 
     __sortBodies: function () {
@@ -80,10 +81,10 @@ var game = {
     }
 };
 
-keyboard.init();
+glitch.keyboard.init();
 
-game.init();
-game.addBody( ui );
-game.addBody( map );
-game.addBody( player );
-// game.play();
+glitch.game.init();
+glitch.game.addBody( glitch.ui );
+glitch.game.addBody( glitch.map );
+glitch.game.addBody( glitch.player );
+// glitch.game.play();

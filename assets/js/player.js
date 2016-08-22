@@ -1,11 +1,11 @@
-var player = {
+glitch.player = {
     init: function () {
         this.z = 10;
         this.width = this.w = 27;
         this.height = this.h = 37;
         this.pos = {
-            x: ( canvas.width / 2 ) - ( this.w / 2 ),
-            y: canvas.height - 100
+            x: ( glitch.canvas.width / 2 ) - ( this.w / 2 ),
+            y: glitch.canvas.height - 100
         };
         this.speed = { x: 3, y: 4 };
         this.velocity = { x: 0, y: 0 };
@@ -23,15 +23,15 @@ var player = {
 
         // update position of player based on input
         this.pos = {
-            x: utils.clamp( 
+            x: glitch.utils.clamp( 
                 this.pos.x + this.velocity.x, 
                 0, 
-                map.width - this.width
+                glitch.map.width - this.width
             ),
-            y: utils.clamp( 
+            y: glitch.utils.clamp( 
                 this.pos.y + this.velocity.y, 
                 0, 
-                map.height - this.height
+                glitch.map.height - this.height
             ) 
         };
     },
@@ -46,24 +46,24 @@ var player = {
             sprite = this.sprite.right;
         }
         
-        canvas.ctx.save();
-        canvas.ctx.drawImage( sprite, this.pos.x, this.pos.y, this.w, this.h );
-        canvas.ctx.restore();
+        glitch.canvas.ctx.save();
+        glitch.canvas.ctx.drawImage( sprite, this.pos.x, this.pos.y, this.w, this.h );
+        glitch.canvas.ctx.restore();
     },
 
     shoot: function () {
-        var b1 = bullet.create( { 
+        var b1 = glitch.bullet.create( { 
             x: this.pos.x + 2, 
             y: this.pos.y + 20
-        }, bullet.position.CENTER );
+        }, glitch.bullet.position.CENTER );
 
-        var b2 = bullet.create( { 
+        var b2 = glitch.bullet.create( { 
             x: this.pos.x + ( this.width - 2), 
             y: this.pos.y + 20
-        }, bullet.position.CENTER );
+        }, glitch.bullet.position.CENTER );
 
-        game.addBody( b1 );
-        game.addBody( b2 );
+        glitch.game.addBody( b1 );
+        glitch.game.addBody( b2 );
     },
 
     // @todo Investigate sprite maps and animating them.
@@ -94,25 +94,25 @@ var player = {
         this.velocity.x = 0;
         this.velocity.y = 0;
 
-        if ( keyboard.isKeyDown( keyboard.codes.SPACE ) ) {
+        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.SPACE ) ) {
             if ( this.canShoot() ) {
                 this.shoot();
             }
         }
 
-        if ( keyboard.isKeyDown( keyboard.codes.LEFT ) ) {
+        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.LEFT ) ) {
             this.velocity.x = -this.speed.x;
         }
 
-        if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
+        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.RIGHT ) ) {
             this.velocity.x = this.speed.x;
         }
 
-        if ( keyboard.isKeyDown( keyboard.codes.UP ) ) {
+        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.UP ) ) {
             this.velocity.y = -this.speed.x;
         }
 
-        if ( keyboard.isKeyDown( keyboard.codes.DOWN ) ) {
+        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.DOWN ) ) {
             this.velocity.y = this.speed.x;
         }
     },

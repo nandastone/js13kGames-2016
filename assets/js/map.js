@@ -1,27 +1,56 @@
-var map = {
+glitch.map = {
     __stars: [],
+    __enemies: [],
+    __frame: 0,
 
     init: function () {
-        var self = this;
-
-        this.width = this.w = canvas.width;
-        this.height = this.h = canvas.height;
+        this.width = glitch.canvas.width;
+        this.height = glitch.canvas.height;
 
         this.__initStars();
+        this.__initEnemies();
     },
 
     update: function () {
+        var self = this;
+
+        this.__frame += 1;
+
         this.__stars.forEach( function ( _v, _k ) {
             _v.pos.y = _v.pos.y + _v.speed;
             if ( _v.pos.y > _v.canvas.height ) _v.pos.y = 0;
         } );
+
+        this.__enemies.forEach( function ( _v, _k ) {
+            if ( !_v.active && _v.activeAt <=  self.__frame ) {
+                _v.active = true;
+                glitch.game.addBody( _v );
+            }
+        } );
     },
 
     render: function () {
-        canvas.ctx.fillStyle = 'black';
-        canvas.ctx.fillRect( 0, 0, canvas.width, canvas.height );
+        glitch.canvas.ctx.fillStyle = 'black';
+        glitch.canvas.ctx.fillRect( 0, 0, this.width, this.height );
 
         this.__renderStars();
+    },
+
+    __initEnemies: function () {
+        for ( var i = 0; i < 5; i++ ) {
+            var enemy = glitch.enemy.create( 
+                glitch.enemy.BASIC, 
+                { 
+                    x: Math.random() * this.width, 
+                    y: -20 
+                } 
+            );
+            
+            enemy.active = false;
+            enemy.activeAt = i * 100;
+
+            this.__enemies.push( enemy );
+        }
     },
 
     __initStars: function () {
@@ -39,7 +68,7 @@ var map = {
 
         this.__stars.push( {
             pos: { x: 0, y: 0 },
-            speed: 0.2,
+            speed: 0.3,
             canvas: this.__createStarsCanvas( 10, 2.5 )
         } );
     },
@@ -48,8 +77,8 @@ var map = {
         var newCanvas = document.createElement( 'canvas' );
         var newCtx = newCanvas.getContext( '2d' );
 
-        newCanvas.width = canvas.width;
-        newCanvas.height = canvas.height;
+        newCanvas.width = this.width;
+        newCanvas.height = this.height;
 
         // @todo How to ensure a good dispersion of stars?
         for ( var i = 0; i < _number; i++ ) {
@@ -59,7 +88,7 @@ var map = {
             newCtx.save();
             newCtx.translate( x, y );
             newCtx.scale( _size, _size );
-            newCtx.globalAlpha = utils.clamp( Math.random(), 0.5, 1 );
+            newCtx.globalAlpha = glitch.utils.clamp( Math.random(), 0.5, 1 );
 
             // draw star shape
             newCtx.fillStyle = '#0046b8';
@@ -78,7 +107,7 @@ var map = {
 
     __renderStars: function () {
         this.__stars.forEach( function ( _v, _k ) { 
-            canvas.ctx.drawImage( 
+            glitch.canvas.ctx.drawImage( 
                 _v.canvas, 
                 0, 
                 _v.pos.y, 
@@ -86,7 +115,7 @@ var map = {
                 _v.canvas.height 
             );
 
-            canvas.ctx.drawImage( 
+            glitch.canvas.ctx.drawImage( 
                 _v.canvas, 
                 0, 
                 _v.pos.y  - _v.canvas.height, 

@@ -1,4 +1,4 @@
-var ui = {
+glitch.ui = {
     __els: {},
     __playing: false,
 
@@ -12,20 +12,20 @@ var ui = {
         this.__els.ms = document.getElementById( 'ms' );
 
         this.__els.tick.addEventListener( 'click', function ( _event ) {
-            game.play( false );
+            glitch.game.play( false );
         } );
 
         this.__els.play.addEventListener( 'click', function ( _event ) {
             if ( self.__playing ) return;
 
-            game.play( true );
+            glitch.game.play( true );
             self.__playing = true;
         } );
 
         this.__els.stage.addEventListener( 'click', function ( _event ) {
             if ( self.__playing ) return;
 
-            game.play( true );
+            glitch.game.play( true );
             self.__playing = true;
         } );
     },
