@@ -2,6 +2,7 @@
 
 glitch.player = {
     init: function () {
+        this.type = glitch.game.ENTITIES.PLAYER;
         this.z = 10;
         this.width = this.w = 27;
         this.height = this.h = 37;
@@ -14,14 +15,14 @@ glitch.player = {
         this.sprite = {};
         this.shootDelay = 0; 
         
-        this.initSprite();
+        this.__initSprite();
     },
 
     update: function () {
         this.shootDelay += 1;
 
         // detect player actions via keyboard input
-        this.detectKeys();
+        this.__detectKeys();
 
         // update position of player based on input
         this.pos = {
@@ -57,19 +58,19 @@ glitch.player = {
         var b1 = glitch.bullet.create( { 
             x: this.pos.x + 2, 
             y: this.pos.y + 20
-        }, glitch.bullet.position.CENTER );
+        } );
 
         var b2 = glitch.bullet.create( { 
-            x: this.pos.x + ( this.width - 2), 
+            x: this.pos.x + ( this.width - 2 ), 
             y: this.pos.y + 20
-        }, glitch.bullet.position.CENTER );
+        } );
 
         glitch.game.addBody( b1 );
         glitch.game.addBody( b2 );
     },
 
     // @todo Investigate sprite maps and animating them.
-    initSprite: function () {
+    __initSprite: function () {
         var normal = new Image();
         var left = new Image();
         var left2 = new Image();
@@ -92,12 +93,12 @@ glitch.player = {
         };
     },
 
-    detectKeys: function () {
+    __detectKeys: function () {
         this.velocity.x = 0;
         this.velocity.y = 0;
 
         if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.SPACE ) ) {
-            if ( this.canShoot() ) {
+            if ( this.__canShoot() ) {
                 this.shoot();
             }
         }
@@ -119,7 +120,7 @@ glitch.player = {
         }
     },
 
-    canShoot: function () {
+    __canShoot: function () {
         if ( this.shootDelay < 10 ) {
             return false;
         }

@@ -1,18 +1,13 @@
 /* global glitch */
 
 glitch.bullet = {
-    position: {
-        LEFT: 1,
-        CENTER: 2,
-        RIGHT: 3
-    },
-
-    create: function ( _pos, _alignment ) {
-        return new Bullet( _pos, _alignment );
+    create: function ( _pos ) {
+        return new Bullet( _pos );
     }
 };
 
-var Bullet = function ( _pos, _alignment ) {
+var Bullet = function ( _pos ) {
+    this.type = glitch.game.ENTITIES.BULLET;
     this.z = 5;
     this.pos = _pos;
     this.width = this.w = 5;
@@ -21,15 +16,16 @@ var Bullet = function ( _pos, _alignment ) {
         y: -10,
         x: 0
     };
+    this.damage = 25;
 
-    // @todo How do centered co-ordinate systems work?
-    if ( _alignment === glitch.bullet.position.CENTER ) {
-        this.pos.x = this.pos.x - ( this.width / 2 );
-        this.pos.y = this.pos.y - ( this.height / 2 );
-    }
+    // center align bullet position
+    this.pos.x = this.pos.x - ( this.width / 2 );
+    this.pos.y = this.pos.y - ( this.height / 2 );
 };
 
 Bullet.prototype.update = function () {
+    var self = this;
+
     this.pos.x = this.pos.x + this.speed.x;
     this.pos.y = this.pos.y + this.speed.y;
 
@@ -46,6 +42,16 @@ Bullet.prototype.update = function () {
         
         glitch.game.removeBody( this );
     }
+
+    // loop enemies and check if any collide
+    glitch.game.getBodies( glitch.game.ENTITIES.ENEMY ).forEach( function ( _v ) {
+        if ( !_v.active ) return;
+
+        if ( glitch.utils.boxCollide( self, _v ) ) {
+            _v.damage( self.damage );
+            glitch.game.removeBody( self );
+        }
+    } );
 };
 
 Bullet.prototype.render = function () {

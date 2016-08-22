@@ -1,12 +1,18 @@
 /* global glitch */
 
 /**
- * 1. Add bullet col detection for enemies.
- * 2. Reduce enemy hp if bullet collide.
- * 3. Show little explosion for bullet if enemy collide.
+ * 1. Show little explosion for bullet if enemy collide.
+ * 2. If enemy dead, show explosion.
+ * 3. For bullet and enemy explosion, play animation.
+ * 4. How to schedule level of enemies in particular pattern?
  */
 
 glitch.game = {
+    ENTITIES: {
+        PLAYER: 1,
+        BULLET: 2,
+        ENEMY: 3
+    },
     MS_PER_FRAME: ( 1000 / 60 ),
 
     __bodies: [],
@@ -71,6 +77,12 @@ glitch.game = {
             if ( _v === _body ) {
                 self.__bodies.splice( _k, 1 );
             }
+        } );
+    },
+
+    getBodies: function ( _type ) {
+        return this.__bodies.filter( function ( _body ) {
+            return _body.type === _type;
         } );
     },
 
