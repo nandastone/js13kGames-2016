@@ -44,18 +44,18 @@ glitch.map = {
     __initEnemies: function () {
         for ( var i = 0; i < this.NUM_ENEMIES; i++ ) {
             var type = glitch.enemy.BASIC;
-            var enemy = glitch.enemy.create( 
-                type, 
-                { 
-                    x: glitch.utils.clamp( 
+            var enemy = glitch.enemy.create(
+                type,
+                {
+                    x: glitch.utils.clamp(
                         Math.random() * this.width,
                         0,
                         this.width - type.width
-                    ), 
+                    ),
                     y: -type.height
-                } 
+                }
             );
-            
+
             enemy.active = false;
             enemy.activeAt = i * this.ENEMY_FREQUENCY;
 
@@ -117,21 +117,21 @@ glitch.map = {
     },
 
     __renderStars: function () {
-        this.__stars.forEach( function ( _starfield ) { 
-            glitch.canvas.ctx.drawImage( 
-                _starfield.canvas, 
-                0, 
-                _starfield.pos.y, 
-                _starfield.canvas.width, 
-                _starfield.canvas.height 
+        this.__stars.forEach( function ( _starfield ) {
+            glitch.canvas.ctx.drawImage(
+                _starfield.canvas,
+                0,
+                _starfield.pos.y,
+                _starfield.canvas.width,
+                _starfield.canvas.height
             );
 
-            glitch.canvas.ctx.drawImage( 
-                _starfield.canvas, 
-                0, 
-                _starfield.pos.y  - _starfield.canvas.height, 
-                _starfield.canvas.width, 
-                _starfield.canvas.height 
+            glitch.canvas.ctx.drawImage(
+                _starfield.canvas,
+                0,
+                _starfield.pos.y  - _starfield.canvas.height,
+                _starfield.canvas.width,
+                _starfield.canvas.height
             );
         } );
     }

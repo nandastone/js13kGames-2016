@@ -11,7 +11,7 @@ glitch.player = {
             x: ( glitch.canvas.width / 2 ) - ( this.w / 2 ),
             y: glitch.canvas.height - 100
         };
-        this.speed = { x: 3, y: 4 };
+        this.speed = { x: 4, y: 5 };
         this.velocity = { x: 0, y: 0 };
         this.sprite = {};
         this.shootDelay = 0;
@@ -23,6 +23,8 @@ glitch.player = {
     },
 
     update: function () {
+        var self = this;
+
         if ( !this.active ) return;
 
         this.shootDelay += 1;
@@ -52,6 +54,19 @@ glitch.player = {
                     glitch.map.height - this.height
                 )
             };
+
+            // loop bullets and check if any collide
+            glitch.game.getBodies( glitch.game.ENTITIES.BULLET ).forEach( function ( _v ) {
+                if ( !_v.active || _v.dead || _v.collidesWith !== glitch.game.ENTITIES.PLAYER ) return;
+
+                if ( glitch.utils.boxCollide( self, _v ) ) {
+                    // damage enemy by bullet amount
+                    self.hurt( _v.damage );
+
+                    // destroy the bullet
+                    _v.kill();
+                }
+            } );
         }
     },
 
@@ -93,13 +108,19 @@ glitch.player = {
 
     shoot: function () {
         var b1 = glitch.bullet.create( {
-            x: this.pos.x + 2,
-            y: this.pos.y + 20
+            pos: {
+                x: this.pos.x + 2,
+                y: this.pos.y + 20
+            },
+            collidesWith: glitch.game.ENTITIES.ENEMY
         } );
 
         var b2 = glitch.bullet.create( {
-            x: this.pos.x + ( this.width - 2 ),
-            y: this.pos.y + 20
+            pos: {
+                x: this.pos.x + ( this.width - 2 ),
+                y: this.pos.y + 20
+            },
+            collidesWith: glitch.game.ENTITIES.ENEMY
         } );
 
         glitch.game.addBody( b1 );

@@ -4,7 +4,7 @@ glitch.enemy = {
     BASIC: {
         width: 20,
         height: 20,
-        speed: { x: 0, y: 2 },
+        speed: { x: 0, y: 3 },
         hp: 100
     },
 
@@ -24,12 +24,18 @@ var Enemy = function ( _type, _pos ) {
     this.hp = _type.hp;
     this.dead = false;
     this.deathFrames = 0;
+
+    this.__frame = 0;
+    this.__hasShot = false;
+    this.__shootFrame = Math.random() * 50;
 };
 
 Enemy.prototype.update = function () {
     var self = this;
 
     if ( !this.active ) return;
+
+    this.__frame += 1;
 
     if ( this.dead ) {
         if ( this.deathFrames >= 6 ) {
@@ -53,7 +59,7 @@ Enemy.prototype.update = function () {
             // 2. Update and render, do not collide.
             // 3. Update and render, do not move or collide.
 
-            if ( !_v.active || _v.dead ) return;
+            if ( !_v.active || _v.dead || _v.collidesWith !== glitch.game.ENTITIES.ENEMY ) return;
 
             if ( glitch.utils.boxCollide( self, _v ) ) {
                 // damage enemy by bullet amount
@@ -76,6 +82,10 @@ Enemy.prototype.update = function () {
                 _v.hurt( _v.damage );
             }
         } );
+
+        if ( !this.__hasShot && this.__frame > this.__shootFrame ) {
+            this.shoot();
+        }
     }
 };
 
@@ -112,4 +122,23 @@ Enemy.prototype.hurt = function ( _damage ) {
     if ( this.hp <= 0 ) {
         this.dead = true;
     }
+};
+
+Enemy.prototype.shoot = function () {
+    var bullet = glitch.bullet.create( {
+        pos: {
+            x: this.pos.x + ( this.width / 2 ),
+            y: this.pos.y + this.height
+        },
+        velocity: {
+            x: 0,
+            y: 5
+        },
+        collidesWith: glitch.game.ENTITIES.PLAYER,
+        damage: 100
+    } );
+
+    glitch.game.addBody( bullet );
+
+    this.__hasShot = true;
 };
