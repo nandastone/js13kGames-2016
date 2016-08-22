@@ -1,4 +1,7 @@
 glitch.map = {
+    NUM_ENEMIES: 20,
+    ENEMY_FREQUENCY: 100,
+
     __stars: [],
     __enemies: [],
     __frame: 0,
@@ -37,17 +40,22 @@ glitch.map = {
     },
 
     __initEnemies: function () {
-        for ( var i = 0; i < 5; i++ ) {
+        for ( var i = 0; i < this.NUM_ENEMIES; i++ ) {
+            var type = glitch.enemy.BASIC;
             var enemy = glitch.enemy.create( 
-                glitch.enemy.BASIC, 
+                type, 
                 { 
-                    x: Math.random() * this.width, 
-                    y: -20 
+                    x: glitch.utils.clamp( 
+                        Math.random() * this.width,
+                        0,
+                        this.width - type.width
+                    ), 
+                    y: -type.height
                 } 
             );
             
             enemy.active = false;
-            enemy.activeAt = i * 100;
+            enemy.activeAt = i * this.ENEMY_FREQUENCY;
 
             this.__enemies.push( enemy );
         }

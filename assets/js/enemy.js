@@ -24,6 +24,11 @@ Enemy.prototype.update = function () {
 
     this.pos.x = this.pos.x + this.speed.x;
     this.pos.y = this.pos.y + this.speed.y;
+
+    // if enemy leaves stage bottom, destroy it
+    if ( this.pos.y > glitch.map.height ) {
+        glitch.game.removeBody( this );
+    }
 };
 
 Enemy.prototype.render = function () {
