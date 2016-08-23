@@ -38,7 +38,7 @@ export default {
 
         this.stars.push( {
             pos: { x: 0, y: 0 },
-            speed: 0.1,
+            speed: 0.15,
             canvas: this.createStarfieldCanvas( 30, 2 ),
         } );
 

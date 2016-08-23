@@ -30,8 +30,6 @@ export default {
     },
 
     update() {
-        const self = this;
-
         if ( !this.isActive ) return;
 
         this.shootDelay += 1;
@@ -68,9 +66,9 @@ export default {
                     _bullet.isDead ||
                     _bullet.collidesWith !== game.ENTITIES.PLAYER ) return;
 
-                if ( boxCollide( self, _bullet ) ) {
+                if ( boxCollide( this, _bullet ) ) {
                     // damage enemy by bullet amount
-                    self.hurt( _bullet.damage );
+                    this.hurt( _bullet.damage );
 
                     // destroy the bullet
                     _bullet.kill();

@@ -1,13 +1,6 @@
 import map from './map';
 import Enemy from './Enemy';
 
-/**
- *
- *
- * @export
- * @class Level
- */
-
 export default class Level {
     constructor( _options = {} ) {
         /**

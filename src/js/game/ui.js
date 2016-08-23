@@ -5,8 +5,6 @@ export default {
     playing: false,
 
     init() {
-        const self = this;
-
         this.els.tick = document.getElementById( 'tick' );
         this.els.play = document.getElementById( 'play' );
         this.els.stage = document.getElementById( 'stage' );
@@ -18,17 +16,17 @@ export default {
         } );
 
         this.els.play.addEventListener( 'click', () => {
-            if ( self.playing ) return;
+            if ( this.playing ) return;
 
             game.play( true );
-            self.playing = true;
+            this.playing = true;
         } );
 
         this.els.stage.addEventListener( 'click', () => {
-            if ( self.playing ) return;
+            if ( this.playing ) return;
 
             game.play( true );
-            self.playing = true;
+            this.playing = true;
         } );
     },
 

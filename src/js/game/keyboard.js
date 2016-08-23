@@ -25,16 +25,14 @@ export default {
     },
 
     init() {
-        const self = this;
-
         document.addEventListener( 'keydown', ( _event ) => {
-            self.down[ _event.keyCode ] = true;
-            self.preserved[ _event.keyCode ] = true;
+            this.down[ _event.keyCode ] = true;
+            this.preserved[ _event.keyCode ] = true;
         } );
 
         document.addEventListener( 'keyup', ( _event ) => {
-            self.released[ _event.keyCode ] = true;
-            delete self.down[ _event.keyCode ];
+            this.released[ _event.keyCode ] = true;
+            delete this.down[ _event.keyCode ];
         } );
     },
 

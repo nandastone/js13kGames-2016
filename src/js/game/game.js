@@ -71,11 +71,9 @@ export default {
     },
 
     removeBody( _body ) {
-        const self = this;
-
         this.bodies.forEach( ( _v, _k ) => {
             if ( _v === _body ) {
-                self.bodies.splice( _k, 1 );
+                this.bodies.splice( _k, 1 );
             }
         } );
     },
