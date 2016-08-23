@@ -1,8 +1,6 @@
-/* global glitch */
-
-glitch.canvas = ( function () {
+const canvas = ( function () {
     var el = document.getElementById( 'stage' );
-    
+
     return {
         el: el,
         ctx: el.getContext( '2d' ),
@@ -10,3 +8,5 @@ glitch.canvas = ( function () {
         height: el.height
     };
 }() );
+
+export default canvas;

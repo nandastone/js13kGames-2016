@@ -1,6 +1,10 @@
-/* global glitch */
+import { boxCollide } from '../utils';
+import game from './game';
+import canvas from './canvas';
+import map from './map';
+import bullet from './bullet';
 
-glitch.enemy = {
+const enemy = {
     BASIC: {
         width: 20,
         height: 20,
@@ -14,7 +18,7 @@ glitch.enemy = {
 };
 
 var Enemy = function ( _type, _pos ) {
-    this.type = glitch.game.ENTITIES.ENEMY;
+    this.type = game.ENTITIES.ENEMY;
     this.active = true;
     this.z = 100;
     this.pos = _pos;
@@ -39,7 +43,7 @@ Enemy.prototype.update = function () {
 
     if ( this.dead ) {
         if ( this.deathFrames >= 6 ) {
-            glitch.game.removeBody( this );
+            game.removeBody( this );
         } else {
             this.deathFrames += 1;
         }
@@ -48,20 +52,20 @@ Enemy.prototype.update = function () {
         this.pos.y = this.pos.y + this.speed.y;
 
         // if enemy leaves stage bottom, destroy it
-        if ( this.pos.y > glitch.map.height ) {
-            glitch.game.removeBody( this );
+        if ( this.pos.y > map.height ) {
+            game.removeBody( this );
         }
 
         // loop enemies and check if any collide
-        glitch.game.getBodies( glitch.game.ENTITIES.BULLET ).forEach( function ( _v ) {
+        game.getBodies( game.ENTITIES.BULLET ).forEach( function ( _v ) {
             // @todo Before define active/dead state. We want:
             // 1. Do not update, render, collide, etc.
             // 2. Update and render, do not collide.
             // 3. Update and render, do not move or collide.
 
-            if ( !_v.active || _v.dead || _v.collidesWith !== glitch.game.ENTITIES.ENEMY ) return;
+            if ( !_v.active || _v.dead || _v.collidesWith !== game.ENTITIES.ENEMY ) return;
 
-            if ( glitch.utils.boxCollide( self, _v ) ) {
+            if ( boxCollide( self, _v ) ) {
                 // damage enemy by bullet amount
                 self.hurt( _v.damage );
 
@@ -71,10 +75,10 @@ Enemy.prototype.update = function () {
         } );
 
         // loop player and check if any collide
-        glitch.game.getBodies( glitch.game.ENTITIES.PLAYER ).forEach( function ( _v ) {
+        game.getBodies( game.ENTITIES.PLAYER ).forEach( function ( _v ) {
             if ( !_v.active || _v.dead ) return;
 
-            if ( glitch.utils.boxCollide( self, _v ) ) {
+            if ( boxCollide( self, _v ) ) {
                 // damage enemy by collide amount
                 self.hurt( _v.damage );
 
@@ -92,28 +96,28 @@ Enemy.prototype.update = function () {
 Enemy.prototype.render = function () {
     if ( !this.active ) return;
 
-    glitch.canvas.ctx.save();
+    canvas.ctx.save();
 
     if ( this.dead && this.deathFrames ) {
         switch ( this.deathFrames ) {
             case 1:
             case 2:
-                glitch.canvas.ctx.globalAlpha = 0.8;
+                canvas.ctx.globalAlpha = 0.8;
                 break;
             case 3:
             case 4:
-                glitch.canvas.ctx.globalAlpha = 0.5;
+                canvas.ctx.globalAlpha = 0.5;
                 break;
             case 5:
             case 6:
             default:
-                glitch.canvas.ctx.globalAlpha = 0.2;
+                canvas.ctx.globalAlpha = 0.2;
         }
     }
 
-    glitch.canvas.ctx.fillStyle = 'red';
-    glitch.canvas.ctx.fillRect( this.pos.x, this.pos.y, this.width, this.height );
-    glitch.canvas.ctx.restore();
+    canvas.ctx.fillStyle = 'red';
+    canvas.ctx.fillRect( this.pos.x, this.pos.y, this.width, this.height );
+    canvas.ctx.restore();
 };
 
 Enemy.prototype.hurt = function ( _damage ) {
@@ -125,7 +129,7 @@ Enemy.prototype.hurt = function ( _damage ) {
 };
 
 Enemy.prototype.shoot = function () {
-    var bullet = glitch.bullet.create( {
+    var b = bullet.create( {
         pos: {
             x: this.pos.x + ( this.width / 2 ),
             y: this.pos.y + this.height
@@ -134,11 +138,13 @@ Enemy.prototype.shoot = function () {
             x: 0,
             y: 5
         },
-        collidesWith: glitch.game.ENTITIES.PLAYER,
+        collidesWith: game.ENTITIES.PLAYER,
         damage: 100
     } );
 
-    glitch.game.addBody( bullet );
+    game.addBody( b );
 
     this.__hasShot = true;
 };
+
+export default enemy;

@@ -2,10 +2,22 @@
   "name": "glitchspace",
   "version": "0.0.1",
   "description": "Entry for js13kGames 2016",
-  "dependencies": {
-    "eslint": "^3.3.1"
-  },
-  "devDependencies": {},
   "author": "Matt Stone",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^3.3.1",
+    "gulp": "3.9.1",
+    "gulp-buffer": "0.0.2",
+    "gulp-concat-css": "2.3.0",
+    "gulp-livereload": "3.8.1",
+    "gulp-rename": "1.2.2",
+    "gulp-sourcemaps": "1.6.0",
+    "gulp-uglify": "1.5.4",
+    "gulp-util": "3.0.7",
+    "gulp-zip": "3.2.0",
+    "handlebars": "4.0.5",
+    "rollup-stream": "1.11.0",
+    "vinyl-buffer": "1.0.0",
+    "vinyl-source-stream": "1.1.0"
+  }
 }

@@ -1,14 +1,14 @@
-/* global glitch */
+import { clamp } from '../utils';
+import canvas from './canvas';
+import ui from './ui';
 
 /**
- * 1. Detect enemy collision with player.
- * 2. Damage enemy and player on collide.
- * 3. Player death detection + explosion animation.
- * 4. How to schedule level of enemies in particular pattern?
- * 5. Improve death animation code to not be so heavily tied into update/render.
+ * 1. How to schedule level of enemies in particular pattern?
+ * 2. Improve death animation code to not be so heavily tied into update/render.
+ * 3. Improve collision check code as above? Component?
  */
 
-glitch.game = {
+export default {
     ENTITIES: {
         PLAYER: 1,
         BULLET: 2,
@@ -19,7 +19,7 @@ glitch.game = {
     __bodies: [],
 
     init: function () {},
-    
+
     play: function ( _continue ) {
         var self = this,
             timeStart, timeEnd;
@@ -31,8 +31,8 @@ glitch.game = {
 
         timeEnd = performance.now();
 
-        glitch.ui.updateMs( timeEnd - timeStart );
-        glitch.ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
+        ui.updateMs( timeEnd - timeStart );
+        ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
 
         if ( _continue || typeof _continue === 'undefined' ) {
             window.setTimeout( function() {
@@ -52,7 +52,7 @@ glitch.game = {
     },
 
     render: function() {
-        glitch.canvas.ctx.clearRect( 0, 0, glitch.canvas.width, glitch.canvas.height );
+        canvas.ctx.clearRect( 0, 0, canvas.width, canvas.height );
 
         this.__bodies.forEach( function ( _v ) {
             if ( typeof _v.render !== 'undefined' ) {
@@ -88,20 +88,14 @@ glitch.game = {
     },
 
     __calculateFps: function ( _delta ) {
-        return 1000 / glitch.utils.clamp( _delta, this.MS_PER_FRAME, 1000 );
+        return 1000 / clamp( _delta, this.MS_PER_FRAME, 1000 );
     },
 
     __sortBodies: function () {
-        this.__bodies.sort( function ( _a, _b ) { 
+        this.__bodies.sort( function ( _a, _b ) {
             return _a.z - _b.z;
         } );
     }
 };
 
-glitch.keyboard.init();
-
-glitch.game.init();
-glitch.game.addBody( glitch.ui );
-glitch.game.addBody( glitch.map );
-glitch.game.addBody( glitch.player );
-// glitch.game.play();
+// export default game;

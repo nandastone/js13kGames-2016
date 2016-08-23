@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Glitchspace</title>
+    {{#if css}}
+        <style>{{{ css }}}</style>
+    {{else}}
+        <link rel="stylesheet" href="main.css">
+    {{/if}}
+</head>
+
+<body>
+
+    <h1>Glitchspace</h1>
+
+    <aside class="sidebar">
+        <button id="tick">Tick</button>
+        <button id="play">Play</button>
+        <p>
+            <span id="fps"></span> FPS
+            <span id="ms"></span> MS
+        </p>
+    </aside>
+
+    <main class="content">
+        <canvas id="stage" width="640" height="480"></canvas>
+    </main>
+
+    {{#if js}}
+        <script>{{{ js }}}</script>
+    {{else}}
+        <script src='main.js'></script>
+    {{/if}}
+
+</body>
+
+</html>

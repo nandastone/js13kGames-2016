@@ -1,15 +1,20 @@
-/* global glitch */
+import { clamp, boxCollide } from '../utils';
+import game from './game';
+import keyboard from './keyboard';
+import canvas from './canvas';
+import map from './map';
+import bullet from './bullet';
 
-glitch.player = {
+const player = {
     init: function () {
-        this.type = glitch.game.ENTITIES.PLAYER;
+        this.type = game.ENTITIES.PLAYER;
         this.active = true;
         this.z = 500;
         this.width = this.w = 27;
         this.height = this.h = 37;
         this.pos = {
-            x: ( glitch.canvas.width / 2 ) - ( this.w / 2 ),
-            y: glitch.canvas.height - 100
+            x: ( canvas.width / 2 ) - ( this.w / 2 ),
+            y: canvas.height - 100
         };
         this.speed = { x: 4, y: 5 };
         this.velocity = { x: 0, y: 0 };
@@ -43,23 +48,23 @@ glitch.player = {
 
             // update position of player based on input
             this.pos = {
-                x: glitch.utils.clamp(
+                x: clamp(
                     this.pos.x + this.velocity.x,
                     0,
-                    glitch.map.width - this.width
+                    map.width - this.width
                 ),
-                y: glitch.utils.clamp(
+                y: clamp(
                     this.pos.y + this.velocity.y,
                     0,
-                    glitch.map.height - this.height
+                    map.height - this.height
                 )
             };
 
             // loop bullets and check if any collide
-            glitch.game.getBodies( glitch.game.ENTITIES.BULLET ).forEach( function ( _v ) {
-                if ( !_v.active || _v.dead || _v.collidesWith !== glitch.game.ENTITIES.PLAYER ) return;
+            game.getBodies( game.ENTITIES.BULLET ).forEach( function ( _v ) {
+                if ( !_v.active || _v.dead || _v.collidesWith !== game.ENTITIES.PLAYER ) return;
 
-                if ( glitch.utils.boxCollide( self, _v ) ) {
+                if ( boxCollide( self, _v ) ) {
                     // damage enemy by bullet amount
                     self.hurt( _v.damage );
 
@@ -75,22 +80,22 @@ glitch.player = {
 
         if ( !this.active ) return;
 
-        glitch.canvas.ctx.save();
+        canvas.ctx.save();
 
         if ( this.dead && this.deathFrames ) {
             switch ( this.deathFrames ) {
                 case 1:
                 case 2:
-                    glitch.canvas.ctx.globalAlpha = 0.8;
+                    canvas.ctx.globalAlpha = 0.8;
                     break;
                 case 3:
                 case 4:
-                    glitch.canvas.ctx.globalAlpha = 0.5;
+                    canvas.ctx.globalAlpha = 0.5;
                     break;
                 case 5:
                 case 6:
                 default:
-                    glitch.canvas.ctx.globalAlpha = 0.2;
+                    canvas.ctx.globalAlpha = 0.2;
             }
         } else {
             // @todo How to animate turning left over a number of ticks?
@@ -102,29 +107,29 @@ glitch.player = {
 
         }
 
-        glitch.canvas.ctx.drawImage( sprite, this.pos.x, this.pos.y, this.w, this.h );
-        glitch.canvas.ctx.restore();
+        canvas.ctx.drawImage( sprite, this.pos.x, this.pos.y, this.w, this.h );
+        canvas.ctx.restore();
     },
 
     shoot: function () {
-        var b1 = glitch.bullet.create( {
+        var b1 = bullet.create( {
             pos: {
                 x: this.pos.x + 2,
                 y: this.pos.y + 20
             },
-            collidesWith: glitch.game.ENTITIES.ENEMY
+            collidesWith: game.ENTITIES.ENEMY
         } );
 
-        var b2 = glitch.bullet.create( {
+        var b2 = bullet.create( {
             pos: {
                 x: this.pos.x + ( this.width - 2 ),
                 y: this.pos.y + 20
             },
-            collidesWith: glitch.game.ENTITIES.ENEMY
+            collidesWith: game.ENTITIES.ENEMY
         } );
 
-        glitch.game.addBody( b1 );
-        glitch.game.addBody( b2 );
+        game.addBody( b1 );
+        game.addBody( b2 );
     },
 
     hurt: function ( _damage ) {
@@ -144,11 +149,11 @@ glitch.player = {
         var right2 = new Image();
 
         // http://www.gsarchives.net/index2.php?category=sprites&system=computer&game=raptor&type=sprites&level0=non-animated
-        normal.src = 'assets/img/plane.gif';
-        left.src = 'assets/img/plane_turning_right_1.gif';
-        left2.src = 'assets/img/plane_turning_right_2.gif';
-        right.src = 'assets/img/plane_turning_left_1.gif';
-        right2.src = 'assets/img/plane_turning_left_2.gif';
+        normal.src = 'plane.gif';
+        left.src = 'plane_turning_right_1.gif';
+        left2.src = 'plane_turning_right_2.gif';
+        right.src = 'plane_turning_left_1.gif';
+        right2.src = 'plane_turning_left_2.gif';
 
         this.sprite = {
             normal: normal,
@@ -163,25 +168,25 @@ glitch.player = {
         this.velocity.x = 0;
         this.velocity.y = 0;
 
-        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.SPACE ) ) {
+        if ( keyboard.isKeyDown( keyboard.codes.SPACE ) ) {
             if ( this.__canShoot() ) {
                 this.shoot();
             }
         }
 
-        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.LEFT ) ) {
+        if ( keyboard.isKeyDown( keyboard.codes.LEFT ) ) {
             this.velocity.x = -this.speed.x;
         }
 
-        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.RIGHT ) ) {
+        if ( keyboard.isKeyDown( keyboard.codes.RIGHT ) ) {
             this.velocity.x = this.speed.x;
         }
 
-        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.UP ) ) {
+        if ( keyboard.isKeyDown( keyboard.codes.UP ) ) {
             this.velocity.y = -this.speed.x;
         }
 
-        if ( glitch.keyboard.isKeyDown( glitch.keyboard.codes.DOWN ) ) {
+        if ( keyboard.isKeyDown( keyboard.codes.DOWN ) ) {
             this.velocity.y = this.speed.x;
         }
     },
@@ -195,3 +200,5 @@ glitch.player = {
         return true;
     }
 };
+
+export default player;

@@ -1,13 +1,15 @@
-/* global glitch */
+import game from './game';
+import canvas from './canvas';
+import map from './map';
 
-glitch.bullet = {
+const bullet = {
     create: function ( _options ) {
         return new Bullet( _options.pos, _options.velocity, _options );
     }
 };
 
 var Bullet = function ( _pos, _velocity, _options ) {
-    this.type = glitch.game.ENTITIES.BULLET;
+    this.type = game.ENTITIES.BULLET;
     this.active = true;
     this.z = 200;
     this.pos = _pos;
@@ -29,7 +31,7 @@ Bullet.prototype.update = function () {
 
     if ( this.dead ) {
         if ( this.deathFrames >= 6 ) {
-            glitch.game.removeBody( this );
+            game.removeBody( this );
         } else {
             this.deathFrames += 1;
         }
@@ -42,13 +44,13 @@ Bullet.prototype.update = function () {
             // off left of screen
             ( ( this.pos.x + this.width ) < 0 ) ||
             // off right of screen
-            ( this.pos.x > glitch.map.width ) ||
+            ( this.pos.x > map.width ) ||
             // off top of screen
             ( ( this.pos.y + this.height ) < 0 ) ||
             // off bottom of screen
-            ( this.pos.y > glitch.map.height ) ) {
+            ( this.pos.y > map.height ) ) {
 
-            glitch.game.removeBody( this );
+            game.removeBody( this );
         }
     }
 };
@@ -56,31 +58,33 @@ Bullet.prototype.update = function () {
 Bullet.prototype.render = function () {
     if ( !this.active ) return;
 
-    glitch.canvas.ctx.save();
+    canvas.ctx.save();
 
     if ( this.dead && this.deathFrames ) {
         switch ( this.deathFrames ) {
             case 1:
             case 2:
-                glitch.canvas.ctx.fillStyle = '#bc6220';
+                canvas.ctx.fillStyle = '#bc6220';
                 break;
             case 3:
             case 4:
-                glitch.canvas.ctx.fillStyle = '#f0d914';
+                canvas.ctx.fillStyle = '#f0d914';
                 break;
             case 5:
             case 6:
             default:
-                glitch.canvas.ctx.fillStyle = 'white';
+                canvas.ctx.fillStyle = 'white';
         }
     } else {
-        glitch.canvas.ctx.fillStyle = 'red';
+        canvas.ctx.fillStyle = 'red';
     }
 
-    glitch.canvas.ctx.fillRect( this.pos.x, this.pos.y, this.width, this.height );
-    glitch.canvas.ctx.restore();
+    canvas.ctx.fillRect( this.pos.x, this.pos.y, this.width, this.height );
+    canvas.ctx.restore();
 };
 
 Bullet.prototype.kill = function () {
     this.dead = true;
 };
+
+export default bullet;

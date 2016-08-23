@@ -1,6 +1,6 @@
-/* global glitch */
+import game from './game';
 
-glitch.ui = {
+const ui = {
     __els: {},
     __playing: false,
 
@@ -14,20 +14,20 @@ glitch.ui = {
         this.__els.ms = document.getElementById( 'ms' );
 
         this.__els.tick.addEventListener( 'click', function ( _event ) {
-            glitch.game.play( false );
+            game.play( false );
         } );
 
         this.__els.play.addEventListener( 'click', function ( _event ) {
             if ( self.__playing ) return;
 
-            glitch.game.play( true );
+            game.play( true );
             self.__playing = true;
         } );
 
         this.__els.stage.addEventListener( 'click', function ( _event ) {
             if ( self.__playing ) return;
 
-            glitch.game.play( true );
+            game.play( true );
             self.__playing = true;
         } );
     },
@@ -40,3 +40,5 @@ glitch.ui = {
         this.__els.fps.innerText = _fps.toFixed( 2 );
     }
 };
+
+export default ui;
