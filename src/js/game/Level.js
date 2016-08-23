@@ -72,6 +72,24 @@ export default class Level {
                             y: -Enemy.TYPES.BASIC.height
                         }
                     },
+                    {
+                        distance: 650,
+                        type: Enemy.TYPES.BASIC,
+                        pattern: Enemy.PATTERNS.DRIFT_LEFT,
+                        pos: {
+                            x: 350,
+                            y: -Enemy.TYPES.BASIC.height
+                        }
+                    },
+                    {
+                        distance: 700,
+                        type: Enemy.TYPES.BASIC,
+                        pattern: Enemy.PATTERNS.DRIFT_RIGHT,
+                        pos: {
+                            x: 350,
+                            y: -Enemy.TYPES.BASIC.height
+                        }
+                    },
                 ],
             },
         };

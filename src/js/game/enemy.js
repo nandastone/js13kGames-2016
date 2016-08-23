@@ -13,6 +13,7 @@ export default class Enemy {
         this.pos = _options.pos;
         this.width = _options.type.width;
         this.height = _options.type.height;
+        this.speed = _options.type.speed;
         this.pattern = _options.pattern;
 
         this.hp = _options.type.hp;
@@ -27,25 +28,27 @@ export default class Enemy {
                 width: 20,
                 height: 20,
                 hp: 100,
-                shootFrames: [ 20, 120 ]
+                speed: { x: 1.5, y: 2 },
+                shootFrames: [ 20, 100, 180 ]
             },
         };
     }
     // @todo Allow moving along path.
     static get PATTERNS() {
         return {
+            // speeds are multipliers of enemy speed
             STRAIGHT_DOWN: {
-                0: { x: 0, y: 2 },
+                0: { x: 0, y: 1 },
             },
             DRIFT_RIGHT: {
-                0: { x: 0, y: 2 },
-                50: { x: 1.5, y: 2 },
-                100: { x: 0, y: 2 },
+                0: { x: 0, y: 1 },
+                50: { x: 1, y: 1 },
+                100: { x: 0, y: 1 },
             },
             DRIFT_LEFT: {
-                0: { x: 0, y: 2 },
-                50: { x: -1.5, y: 2 },
-                100: { x: 0, y: 2 },
+                0: { x: 0, y: 1 },
+                50: { x: -1, y: 1 },
+                100: { x: 0, y: 1 },
             },
         };
     }
@@ -61,10 +64,10 @@ export default class Enemy {
                 this.deathFrames += 1;
             }
         } else {
-            const speed = this.getPatternStage();
+            const patternSpeed = this.getPatternStage();
 
-            this.pos.x += speed.x;
-            this.pos.y += speed.y;
+            this.pos.x += ( this.speed.x * patternSpeed.x );
+            this.pos.y += ( this.speed.y * patternSpeed.y );
 
             // if enemy leaves stage bottom, destroy it
             if ( this.pos.y > map.height ) {

@@ -8,10 +8,35 @@ import ui from './ui';
  * approaches a bright glitchy light and merges. The whiteness fades to reveal you were asleep on the space station all
  * along.
  *
+ * Gameplay consists of standard SHMUP gameplay with increasingly complex waves of enemies. New and more powerful
+ * enemies are introduced at points. Goal of 5 unique enemies. Certain enemies drop new weapons which help combat
+ * increasing difficulty. At end of game there is a boss which requires a unique pattern to defeat. Glitch is
+ * introduced by:
+ *
+ * 1. Glitch storm to start game.
+ * 2. Triggered points where smaller glitch storm flies across background, and will add extra challenge:
+ *      - speed up the pace of the game
+ *      - make enemy bullets almost invisible
+ *      - your weapon glitches and does not work
+ * 3. Weapon has a chance to glitch enemies on death into random objects.
+ * 4. Enemies have a strange and glitchy appearance.
+ * 5. Boss requires a glitchy non-obvious mechanic to defeat.
+ *
+ * Enemies:
+ *
+ * 1. Shoots 2 bullets straight ahead and moves in predictable pattern.
+ * 2. Shoots two sets of two bullets as it moves sideways.
+ * 3. Shoots two bullets forward as it moves fast and diagonal across the screen.
+ * 4. Shoots bullets towards the players location as it moves side to side down the screen.
+ * 5. Strong ship that shoots two lasers in regular cycles.
+ *
  * @todo:
  * 1. Improve death animation code to not be so heavily tied into update/render.
  * 2. Improve collision check code as above? Component?
- * 3. Improve enemy shoot code to set timed points of fire.
+ * 3. Create new enemy types and movement patterns.
+ * 4. Create new weapons.
+ * 5. Create power ups to equip new weapons.
+ * 6. Create enemy that drops power up.
  */
 export default {
     ENTITIES: {
