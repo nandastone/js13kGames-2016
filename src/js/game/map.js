@@ -38,13 +38,13 @@ export default {
 
         this.stars.push( {
             pos: { x: 0, y: 0 },
-            speed: 0.15,
+            speed: 0.3,
             canvas: this.createStarfieldCanvas( 30, 2 ),
         } );
 
         this.stars.push( {
             pos: { x: 0, y: 0 },
-            speed: 0.3,
+            speed: 0.5,
             canvas: this.createStarfieldCanvas( 10, 2.5 ),
         } );
     },
