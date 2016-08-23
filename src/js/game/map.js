@@ -2,38 +2,23 @@ import { clamp } from '../utils';
 import canvas from './canvas';
 import game from './game';
 import Enemy from './Enemy';
+import Level from './Level';
 
 export default {
-    NUM_ENEMIES: 20,
-    ENEMY_FREQUENCY: 100,
-
     stars: [],
-    enemies: [],
-    frame: 0,
 
     init() {
         this.width = canvas.width;
         this.height = canvas.height;
 
         this.initStars();
-        this.initEnemies();
+        this.initLevel( Level.LEVELS.ONE );
     },
 
     update() {
-        const self = this;
-
-        this.frame += 1;
-
         this.stars.forEach( ( _star ) => {
             _star.pos.y += _star.speed;
             if ( _star.pos.y > _star.canvas.height ) _star.pos.y = 0;
-        } );
-
-        this.enemies.forEach( ( _enemy ) => {
-            if ( !_enemy.active && _enemy.activeAt <= self.frame ) {
-                _enemy.active = true;
-                game.addBody( _enemy );
-            }
         } );
     },
 
@@ -42,28 +27,6 @@ export default {
         canvas.ctx.fillRect( 0, 0, this.width, this.height );
 
         this.renderStars();
-    },
-
-    initEnemies() {
-        for ( let i = 0; i < this.NUM_ENEMIES; i++ ) {
-            const type = Enemy.TYPES.BASIC;
-            const e = new Enemy( {
-                type,
-                pos: {
-                    x: clamp(
-                        Math.random() * this.width,
-                        0,
-                        this.width - type.width
-                    ),
-                    y: -type.height,
-                },
-            } );
-
-            e.active = false;
-            e.activeAt = i * this.ENEMY_FREQUENCY;
-
-            this.enemies.push( e );
-        }
     },
 
     initStars() {
@@ -138,4 +101,10 @@ export default {
             );
         } );
     },
+
+    initLevel( _level ) {
+        var l = new Level( { level: _level } );
+        // this.currentLevel
+        game.addBody( l );
+    }
 };

@@ -6,20 +6,21 @@ import Bullet from './Bullet';
 
 export default class Enemy {
     constructor( _options = {} ) {
-        this.type = game.ENTITIES.ENEMY;
-        this.active = true;
+        this.entity = game.ENTITIES.ENEMY;
+        this.isActive = true;
+
         this.z = 100;
         this.pos = _options.pos;
         this.width = _options.type.width;
         this.height = _options.type.height;
         this.speed = _options.type.speed;
-        this.hp = _options.type.hp;
-        this.dead = false;
-        this.deathFrames = 0;
 
+        this.hp = _options.type.hp;
         this.frame = 0;
+        this.isDead = false;
+        this.deathFrames = 0;
         this.hasShot = false;
-        this.shootFrame = Math.random() * 50;
+        this.shootFrame = _options.type.shootFrame;
     }
     static get TYPES() {
         return {
@@ -28,15 +29,16 @@ export default class Enemy {
                 height: 20,
                 speed: { x: 0, y: 3 },
                 hp: 100,
+                shootFrame: 40,
             },
         };
     }
     update() {
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
         this.frame += 1;
 
-        if ( this.dead ) {
+        if ( this.isDead ) {
             if ( this.deathFrames >= 6 ) {
                 game.removeBody( this );
             } else {
@@ -58,8 +60,8 @@ export default class Enemy {
                 // 2. Update and render, do not collide.
                 // 3. Update and render, do not move or collide.
 
-                if ( !_bullet.active ||
-                    _bullet.dead ||
+                if ( !_bullet.isActive ||
+                    _bullet.isDead ||
                     _bullet.collidesWith !== game.ENTITIES.ENEMY ) return;
 
                 if ( boxCollide( this, _bullet ) ) {
@@ -73,7 +75,7 @@ export default class Enemy {
 
             // loop player and check if any collide
             game.getBodies( game.ENTITIES.PLAYER ).forEach( ( _player ) => {
-                if ( !_player.active || _player.dead ) return;
+                if ( !_player.isActive || _player.isDead ) return;
 
                 if ( boxCollide( this, _player ) ) {
                     // damage enemy by collide amount
@@ -90,11 +92,11 @@ export default class Enemy {
         }
     }
     render() {
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
         canvas.ctx.save();
 
-        if ( this.dead && this.deathFrames ) {
+        if ( this.isDead && this.deathFrames ) {
             switch ( this.deathFrames ) {
             case 1:
             case 2:
@@ -119,7 +121,7 @@ export default class Enemy {
         this.hp -= _damage;
 
         if ( this.hp <= 0 ) {
-            this.dead = true;
+            this.isDead = true;
         }
     }
     shoot() {

@@ -4,26 +4,28 @@ import map from './map';
 
 export default class Bullet {
     constructor( _options = {} ) {
-        this.type = game.ENTITIES.BULLET;
-        this.active = true;
+        this.entity = game.ENTITIES.BULLET;
+        this.isActive = true;
+        this.isDead = false;
+        this.collidesWith = _options.collidesWith;
+
         this.z = 200;
         this.pos = _options.pos;
         this.width = this.w = 5;
         this.height = this.h = 5;
         this.speed = _options.velocity || { y: -10, x: 0 };
+
         this.damage = _options.damage || 25;
-        this.dead = false;
         this.deathFrames = 0;
-        this.collidesWith = _options.collidesWith;
 
         // center align bullet position
         this.pos.x = this.pos.x - ( this.width / 2 );
         this.pos.y = this.pos.y - ( this.height / 2 );
     }
     update() {
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
-        if ( this.dead ) {
+        if ( this.isDead ) {
             if ( this.deathFrames >= 6 ) {
                 game.removeBody( this );
             } else {
@@ -48,11 +50,11 @@ export default class Bullet {
         }
     }
     render() {
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
         canvas.ctx.save();
 
-        if ( this.dead && this.deathFrames ) {
+        if ( this.isDead && this.deathFrames ) {
             switch ( this.deathFrames ) {
             case 1:
             case 2:
@@ -75,6 +77,6 @@ export default class Bullet {
         canvas.ctx.restore();
     }
     kill() {
-        this.dead = true;
+        this.isDead = true;
     }
 }

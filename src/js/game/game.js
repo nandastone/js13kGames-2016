@@ -80,8 +80,8 @@ export default {
         } );
     },
 
-    getBodies( _type ) {
-        return this.bodies.filter( ( _body ) => _body.type === _type );
+    getBodies( _entity ) {
+        return this.bodies.filter( ( _body ) => _body.entity === _entity );
     },
 
     calculateFps( _delta ) {

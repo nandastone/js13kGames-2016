@@ -7,9 +7,11 @@ import Bullet from './Bullet';
 
 export default {
     init() {
-        this.type = game.ENTITIES.PLAYER;
-        this.active = true;
+        this.entity = game.ENTITIES.PLAYER;
+        this.isActive = true;
+
         this.z = 500;
+        this.sprite = {};
         this.width = this.w = 27;
         this.height = this.h = 37;
         this.pos = {
@@ -18,7 +20,7 @@ export default {
         };
         this.speed = { x: 4, y: 5 };
         this.velocity = { x: 0, y: 0 };
-        this.sprite = {};
+
         this.shootDelay = 0;
         this.hp = 200;
         this.damage = 100;
@@ -30,15 +32,15 @@ export default {
     update() {
         const self = this;
 
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
         this.shootDelay += 1;
 
-        if ( this.dead ) {
+        if ( this.isDead ) {
             if ( this.deathFrames >= 6 ) {
                 // @todo Game over
                 console.log( 'GAME OVER MAN!' );
-                this.active = false;
+                this.isActive = false;
             } else {
                 this.deathFrames += 1;
             }
@@ -62,8 +64,8 @@ export default {
 
             // loop bullets and check if any collide
             game.getBodies( game.ENTITIES.BULLET ).forEach( ( _bullet ) => {
-                if ( !_bullet.active ||
-                    _bullet.dead ||
+                if ( !_bullet.isActive ||
+                    _bullet.isDead ||
                     _bullet.collidesWith !== game.ENTITIES.PLAYER ) return;
 
                 if ( boxCollide( self, _bullet ) ) {
@@ -80,11 +82,11 @@ export default {
     render() {
         let sprite = this.sprite.normal;
 
-        if ( !this.active ) return;
+        if ( !this.isActive ) return;
 
         canvas.ctx.save();
 
-        if ( this.dead && this.deathFrames ) {
+        if ( this.isDead && this.deathFrames ) {
             switch ( this.deathFrames ) {
             case 1:
             case 2:
@@ -135,7 +137,7 @@ export default {
         this.hp -= _damage;
 
         if ( this.hp <= 0 ) {
-            this.dead = true;
+            this.isDead = true;
         }
     },
 
