@@ -13,23 +13,40 @@ export default class Enemy {
         this.pos = _options.pos;
         this.width = _options.type.width;
         this.height = _options.type.height;
-        this.speed = _options.type.speed;
+        this.pattern = _options.pattern;
 
         this.hp = _options.type.hp;
         this.frame = 0;
         this.isDead = false;
         this.deathFrames = 0;
-        this.hasShot = false;
         this.shootFrame = _options.type.shootFrame;
+        this.shootCount = _options.type.shootCount;
     }
     static get TYPES() {
         return {
             BASIC: {
                 width: 20,
                 height: 20,
-                speed: { x: 0, y: 3 },
                 hp: 100,
-                shootFrame: 40,
+                shootFrame: 50,
+                shootCount: 2,
+            },
+        };
+    }
+    static get PATTERNS() {
+        return {
+            STRAIGHT_DOWN: {
+                0: { x: 0, y: 2 },
+            },
+            DRIFT_RIGHT: {
+                0: { x: 0, y: 2 },
+                50: { x: 2, y: 2 },
+                100: { x: 0, y: 2 },
+            },
+            DRIFT_LEFT: {
+                0: { x: 0, y: 2 },
+                50: { x: -2, y: 2 },
+                100: { x: 0, y: 2 },
             },
         };
     }
@@ -45,8 +62,10 @@ export default class Enemy {
                 this.deathFrames += 1;
             }
         } else {
-            this.pos.x = this.pos.x + this.speed.x;
-            this.pos.y = this.pos.y + this.speed.y;
+            const speed = this.getPatternStage();
+
+            this.pos.x += speed.x;
+            this.pos.y += speed.y;
 
             // if enemy leaves stage bottom, destroy it
             if ( this.pos.y > map.height ) {
@@ -86,7 +105,7 @@ export default class Enemy {
                 }
             } );
 
-            if ( !this.hasShot && this.frame > this.shootFrame ) {
+            if ( this.shootCount && !( this.frame % this.shootFrame ) ) {
                 this.shoot();
             }
         }
@@ -125,6 +144,8 @@ export default class Enemy {
         }
     }
     shoot() {
+        this.shootCount -= 1;
+
         const b = new Bullet( {
             pos: {
                 x: this.pos.x + ( this.width / 2 ),
@@ -139,7 +160,19 @@ export default class Enemy {
         } );
 
         game.addBody( b );
+    }
+    getPatternStage() {
+        // @todo Improve performance of this loop.
+        const stages = Object.keys( this.pattern ).reverse();
+        let speed = {};
 
-        this.hasShot = true;
+        for ( let i = 0, l = stages.length; i < l; i++ ) {
+            if ( this.frame >= stages[ i ] ) {
+                speed = this.pattern[ stages[ i ] ];
+                break;
+            }
+        }
+
+        return speed;
     }
 }

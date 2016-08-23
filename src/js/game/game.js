@@ -3,11 +3,16 @@ import canvas from './canvas';
 import ui from './ui';
 
 /**
- * 1. How to schedule level of enemies in particular pattern?
- * 2. Improve death animation code to not be so heavily tied into update/render.
- * 3. Improve collision check code as above? Component?
+ * Game starts on space station. Glitch storm hits station. Escape craft is launched into the aftermath and weird
+ * glitch creatures attack. Fighting off waves of attackers until the boss is reached. Once boss is defeated the craft
+ * approaches a bright glitchy light and merges. The whiteness fades to reveal you were asleep on the space station all
+ * along.
+ *
+ * @todo:
+ * 1. Improve death animation code to not be so heavily tied into update/render.
+ * 2. Improve collision check code as above? Component?
+ * 3. Improve enemy shoot code to set timed points of fire.
  */
-
 export default {
     ENTITIES: {
         PLAYER: 1,
