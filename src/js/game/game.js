@@ -12,90 +12,83 @@ export default {
     ENTITIES: {
         PLAYER: 1,
         BULLET: 2,
-        ENEMY: 3
+        ENEMY: 3,
     },
     MS_PER_FRAME: ( 1000 / 60 ),
 
-    __bodies: [],
+    bodies: [],
 
-    init: function () {},
+    init() {},
 
-    play: function ( _continue ) {
-        var self = this,
-            timeStart, timeEnd;
-
-        timeStart = performance.now();
+    play( _continue ) {
+        const timeStart = performance.now();
 
         this.update();
         this.render();
 
-        timeEnd = performance.now();
+        const timeEnd = performance.now();
 
         ui.updateMs( timeEnd - timeStart );
-        ui.updateFps( this.__calculateFps( timeEnd - timeStart ) );
+        ui.updateFps( this.calculateFps( timeEnd - timeStart ) );
 
         if ( _continue || typeof _continue === 'undefined' ) {
-            window.setTimeout( function() {
-                window.requestAnimationFrame( function () { self.play.call( self ); } );
+            window.setTimeout( () => {
+                window.requestAnimationFrame( () => { this.play.call( this ); } );
             }, this.MS_PER_FRAME - ( timeEnd - timeStart ) );
         }
     },
 
-    update: function() {
-        this.__sortBodies();
+    update() {
+        this.sortBodies();
 
-        this.__bodies.forEach( function ( _v ) {
-            if ( typeof _v.update !== 'undefined' ) {
-                _v.update();
+        this.bodies.forEach( ( _body ) => {
+            if ( typeof _body.update !== 'undefined' ) {
+                _body.update();
             }
         } );
     },
 
-    render: function() {
+    render() {
         canvas.ctx.clearRect( 0, 0, canvas.width, canvas.height );
 
-        this.__bodies.forEach( function ( _v ) {
-            if ( typeof _v.render !== 'undefined' ) {
-                _v.render();
+        this.bodies.forEach( ( _body ) => {
+            if ( typeof _body.render !== 'undefined' ) {
+                _body.render();
             }
         } );
     },
 
-    addBody: function ( _body ) {
-        if ( typeof _body.init !== 'undefined' ) {
-            _body.init();
+    addBody( _body ) {
+        const body = _body;
+
+        if ( typeof body.init !== 'undefined' ) {
+            body.init();
         }
 
-        if ( !_body.z ) _body.z = 0;
+        if ( !body.z ) body.z = 0;
 
-        this.__bodies.push( _body );
+        this.bodies.push( body );
     },
 
-    removeBody: function ( _body ) {
-        var self = this;
+    removeBody( _body ) {
+        const self = this;
 
-        this.__bodies.forEach( function ( _v, _k ) {
+        this.bodies.forEach( ( _v, _k ) => {
             if ( _v === _body ) {
-                self.__bodies.splice( _k, 1 );
+                self.bodies.splice( _k, 1 );
             }
         } );
     },
 
-    getBodies: function ( _type ) {
-        return this.__bodies.filter( function ( _body ) {
-            return _body.type === _type;
-        } );
+    getBodies( _type ) {
+        return this.bodies.filter( ( _body ) => _body.type === _type );
     },
 
-    __calculateFps: function ( _delta ) {
+    calculateFps( _delta ) {
         return 1000 / clamp( _delta, this.MS_PER_FRAME, 1000 );
     },
 
-    __sortBodies: function () {
-        this.__bodies.sort( function ( _a, _b ) {
-            return _a.z - _b.z;
-        } );
-    }
+    sortBodies() {
+        this.bodies.sort( ( _a, _b ) => _a.z - _b.z );
+    },
 };
-
-// export default game;

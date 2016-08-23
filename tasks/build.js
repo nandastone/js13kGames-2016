@@ -3,14 +3,14 @@
 const gulp        = require('gulp');
 const rollup      = require('rollup-stream');
 const srcmaps     = require('gulp-sourcemaps');
-const uglify      = require('gulp-uglify');
+const uglifyjs    = require('uglify-js-harmony');
+const minifier    = require('gulp-uglify');
 const buffer      = require('vinyl-buffer');
 const source      = require('vinyl-source-stream');
 const rename      = require('gulp-rename');
 const livereload  = require('gulp-livereload');
 
 module.exports = () => {
-
   gulp.task( 'build', [ 'build-min' ] );
 
   gulp.task( 'build-full', () => {
@@ -27,7 +27,7 @@ module.exports = () => {
 
   gulp.task( 'build-min', [ 'build-full' ], () => {
     return gulp.src('./dist/main.js')
-      .pipe( uglify() )
+    //   .pipe( minifier({}, uglifyjs) )
       .pipe( rename('main.min.js') )
       .pipe( gulp.dest('./dist') );
   });
