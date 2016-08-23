@@ -1,9 +1,9 @@
 import { clamp } from '../utils';
 import canvas from './canvas';
 import game from './game';
-import enemy from './enemy';
+import Enemy from './Enemy';
 
-const map = {
+export default {
     NUM_ENEMIES: 20,
     ENEMY_FREQUENCY: 100,
 
@@ -46,18 +46,18 @@ const map = {
 
     initEnemies() {
         for ( let i = 0; i < this.NUM_ENEMIES; i++ ) {
-            const type = enemy.BASIC;
-            const e = enemy.create(
+            const type = Enemy.TYPES.BASIC;
+            const e = new Enemy( {
                 type,
-                {
+                pos: {
                     x: clamp(
                         Math.random() * this.width,
                         0,
                         this.width - type.width
                     ),
                     y: -type.height,
-                }
-            );
+                },
+            } );
 
             e.active = false;
             e.activeAt = i * this.ENEMY_FREQUENCY;
@@ -139,5 +139,3 @@ const map = {
         } );
     },
 };
-
-export default map;

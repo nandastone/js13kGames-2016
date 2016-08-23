@@ -1,12 +1,10 @@
-const canvas = ( function () {
-    var el = document.getElementById( 'stage' );
+export default ( function canvas() {
+    const el = document.getElementById( 'stage' );
 
     return {
-        el: el,
+        el,
         ctx: el.getContext( '2d' ),
         width: el.width,
-        height: el.height
+        height: el.height,
     };
 }() );
-
-export default canvas;
