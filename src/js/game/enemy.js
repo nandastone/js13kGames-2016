@@ -16,6 +16,7 @@ export default class Enemy {
         this.speed = _options.type.speed;
         this.pattern = _options.pattern;
 
+        this.type = _options.type;
         this.hp = _options.type.hp;
         this.frame = 0;
         this.isDead = false;
@@ -25,12 +26,23 @@ export default class Enemy {
     static get TYPES() {
         return {
             BASIC: {
+                // @todo Need better way of enemy being able to reference its own type.
+                name: 'basic',
                 width: 20,
                 height: 20,
                 hp: 100,
-                speed: { x: 1.5, y: 2 },
+                speed: { x: 1.5, y: 1.5 },
                 shootFrames: [ 20, 100, 180 ]
             },
+
+            DOUBLE: {
+                name: 'double',
+                width: 50,
+                height: 20,
+                hp: 100,
+                speed: { x: 1.5, y: 1.5 },
+                shootFrames: [ 40, 80, 180, 220 ]
+            }
         };
     }
     // @todo Allow moving along path.
@@ -49,6 +61,13 @@ export default class Enemy {
                 0: { x: 0, y: 1 },
                 50: { x: -1, y: 1 },
                 100: { x: 0, y: 1 },
+            },
+            DRIFT_RIGHT_THEN_BACK: {
+                0: { x: 0, y: 1 },
+                50: { x: 1, y: 1 },
+                100: { x: 0, y: 1 },
+                190: { x: -1, y: 1 },
+                240: { x: 0, y: 1 },
             },
         };
     }
@@ -146,20 +165,52 @@ export default class Enemy {
         }
     }
     shoot() {
-        const b = new Bullet( {
-            pos: {
-                x: this.pos.x + ( this.width / 2 ),
-                y: this.pos.y + this.height,
-            },
-            velocity: {
-                x: 0,
-                y: 5,
-            },
-            collidesWith: game.ENTITIES.PLAYER,
-            damage: 100,
-        } );
+        // @todo Compare like `this.type === Enemy.TYPES.BASIC`
+        if ( this.type.name === 'basic' ) {
+            const b = new Bullet( {
+                pos: {
+                    x: this.pos.x + ( this.width / 2 ),
+                    y: this.pos.y + this.height,
+                },
+                velocity: {
+                    x: 0,
+                    y: 5,
+                },
+                collidesWith: game.ENTITIES.PLAYER,
+                damage: 100,
+            } );
 
-        game.addBody( b );
+            game.addBody( b );
+        } else if ( this.type.name === 'double' ) {
+            const b1 = new Bullet( {
+                pos: {
+                    x: this.pos.x + ( this.width / 2 ) - 15,
+                    y: this.pos.y + 20,
+                },
+                velocity: {
+                    x: 0,
+                    y: 5,
+                },
+                collidesWith: game.ENTITIES.PLAYER,
+                damage: 100
+            } );
+
+            const b2 = new Bullet( {
+                pos: {
+                    x: this.pos.x + ( this.width / 2 ) + 15,
+                    y: this.pos.y + 20,
+                },
+                velocity: {
+                    x: 0,
+                    y: 5,
+                },
+                collidesWith: game.ENTITIES.PLAYER,
+                damage: 100
+            } );
+
+            game.addBody( b1 );
+            game.addBody( b2 );
+        }
     }
     getPatternStage() {
         const stages = Object.keys( this.pattern ).reverse();

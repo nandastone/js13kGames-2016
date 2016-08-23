@@ -10,6 +10,7 @@ export default class Level {
 
         this.frame = 0;
         this.level = _options.level;
+        // @todo Clear enemies from array once removed from game.
         this.enemies = [];
 
         this.initEnemies();
@@ -47,20 +48,20 @@ export default class Level {
                     },
                     {
                         distance: 400,
-                        type: Enemy.TYPES.BASIC,
-                        pattern: Enemy.PATTERNS.DRIFT_RIGHT,
+                        type: Enemy.TYPES.DOUBLE,
+                        pattern: Enemy.PATTERNS.DRIFT_RIGHT_THEN_BACK,
                         pos: {
                             x: 100,
-                            y: -Enemy.TYPES.BASIC.height
+                            y: -Enemy.TYPES.DOUBLE.height
                         }
                     },
                     {
                         distance: 400,
-                        type: Enemy.TYPES.BASIC,
-                        pattern: Enemy.PATTERNS.DRIFT_RIGHT,
+                        type: Enemy.TYPES.DOUBLE,
+                        pattern: Enemy.PATTERNS.DRIFT_RIGHT_THEN_BACK,
                         pos: {
                             x: 200,
-                            y: -Enemy.TYPES.BASIC.height
+                            y: -Enemy.TYPES.DOUBLE.height
                         }
                     },
                     {
