@@ -2,7 +2,7 @@ import { boxCollide } from '../utils';
 import game from './game';
 import canvas from './canvas';
 import map from './map';
-import bullet from './bullet';
+import Bullet from './Bullet';
 
 const enemy = {
     BASIC: {
@@ -57,33 +57,33 @@ Enemy.prototype.update = function () {
         }
 
         // loop enemies and check if any collide
-        game.getBodies( game.ENTITIES.BULLET ).forEach( function ( _v ) {
+        game.getBodies( game.ENTITIES.BULLET ).forEach( function ( _bullet ) {
             // @todo Before define active/dead state. We want:
             // 1. Do not update, render, collide, etc.
             // 2. Update and render, do not collide.
             // 3. Update and render, do not move or collide.
 
-            if ( !_v.active || _v.dead || _v.collidesWith !== game.ENTITIES.ENEMY ) return;
+            if ( !_bullet.active || _bullet.dead || _bullet.collidesWith !== game.ENTITIES.ENEMY ) return;
 
-            if ( boxCollide( self, _v ) ) {
+            if ( boxCollide( self, _bullet ) ) {
                 // damage enemy by bullet amount
-                self.hurt( _v.damage );
+                self.hurt( _bullet.damage );
 
                 // destroy the bullet
-                _v.kill();
+                _bullet.kill();
             }
         } );
 
         // loop player and check if any collide
-        game.getBodies( game.ENTITIES.PLAYER ).forEach( function ( _v ) {
-            if ( !_v.active || _v.dead ) return;
+        game.getBodies( game.ENTITIES.PLAYER ).forEach( function ( _player ) {
+            if ( !_player.active || _player.dead ) return;
 
-            if ( boxCollide( self, _v ) ) {
+            if ( boxCollide( self, _player ) ) {
                 // damage enemy by collide amount
-                self.hurt( _v.damage );
+                self.hurt( _player.damage );
 
                 // damage the player by collide amount
-                _v.hurt( _v.damage );
+                _player.hurt( _player.damage );
             }
         } );
 
@@ -129,7 +129,7 @@ Enemy.prototype.hurt = function ( _damage ) {
 };
 
 Enemy.prototype.shoot = function () {
-    var b = bullet.create( {
+    var b = new Bullet( {
         pos: {
             x: this.pos.x + ( this.width / 2 ),
             y: this.pos.y + this.height

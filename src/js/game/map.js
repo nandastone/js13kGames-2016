@@ -7,47 +7,47 @@ const map = {
     NUM_ENEMIES: 20,
     ENEMY_FREQUENCY: 100,
 
-    __stars: [],
-    __enemies: [],
-    __frame: 0,
+    stars: [],
+    enemies: [],
+    frame: 0,
 
-    init: function () {
+    init() {
         this.width = canvas.width;
         this.height = canvas.height;
 
-        this.__initStars();
-        this.__initEnemies();
+        this.initStars();
+        this.initEnemies();
     },
 
-    update: function () {
-        var self = this;
+    update() {
+        const self = this;
 
-        this.__frame += 1;
+        this.frame += 1;
 
-        this.__stars.forEach( function ( _star ) {
-            _star.pos.y = _star.pos.y + _star.speed;
+        this.stars.forEach( ( _star ) => {
+            _star.pos.y += _star.speed;
             if ( _star.pos.y > _star.canvas.height ) _star.pos.y = 0;
         } );
 
-        this.__enemies.forEach( function ( _enemy ) {
-            if ( !_enemy.active && _enemy.activeAt <=  self.__frame ) {
+        this.enemies.forEach( ( _enemy ) => {
+            if ( !_enemy.active && _enemy.activeAt <= self.frame ) {
                 _enemy.active = true;
                 game.addBody( _enemy );
             }
         } );
     },
 
-    render: function () {
+    render() {
         canvas.ctx.fillStyle = 'black';
         canvas.ctx.fillRect( 0, 0, this.width, this.height );
 
-        this.__renderStars();
+        this.renderStars();
     },
 
-    __initEnemies: function () {
-        for ( var i = 0; i < this.NUM_ENEMIES; i++ ) {
-            var type = enemy.BASIC;
-            var e = enemy.create(
+    initEnemies() {
+        for ( let i = 0; i < this.NUM_ENEMIES; i++ ) {
+            const type = enemy.BASIC;
+            const e = enemy.create(
                 type,
                 {
                     x: clamp(
@@ -55,48 +55,48 @@ const map = {
                         0,
                         this.width - type.width
                     ),
-                    y: -type.height
+                    y: -type.height,
                 }
             );
 
             e.active = false;
             e.activeAt = i * this.ENEMY_FREQUENCY;
 
-            this.__enemies.push( e );
+            this.enemies.push( e );
         }
     },
 
-    __initStars: function () {
-        this.__stars.push( {
+    initStars() {
+        this.stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0,
-            canvas: this.__createStarfieldCanvas( 40, 1 )
+            canvas: this.createStarfieldCanvas( 40, 1 ),
         } );
 
-        this.__stars.push( {
+        this.stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0.1,
-            canvas: this.__createStarfieldCanvas( 30, 2 )
+            canvas: this.createStarfieldCanvas( 30, 2 ),
         } );
 
-        this.__stars.push( {
+        this.stars.push( {
             pos: { x: 0, y: 0 },
             speed: 0.3,
-            canvas: this.__createStarfieldCanvas( 10, 2.5 )
+            canvas: this.createStarfieldCanvas( 10, 2.5 ),
         } );
     },
 
-    __createStarfieldCanvas: function ( _number, _size ) {
-        var newCanvas = document.createElement( 'canvas' );
-        var newCtx = newCanvas.getContext( '2d' );
+    createStarfieldCanvas( _number, _size ) {
+        const newCanvas = document.createElement( 'canvas' );
+        const newCtx = newCanvas.getContext( '2d' );
 
         newCanvas.width = this.width;
         newCanvas.height = this.height;
 
         // @todo How to ensure a good dispersion of stars?
-        for ( var i = 0; i < _number; i++ ) {
-            var x = Math.random() * newCanvas.width;
-            var y = Math.random() * newCanvas.height;
+        for ( let i = 0; i < _number; i++ ) {
+            const x = Math.random() * newCanvas.width;
+            const y = Math.random() * newCanvas.height;
 
             newCtx.save();
             newCtx.translate( x, y );
@@ -119,8 +119,8 @@ const map = {
         return newCanvas;
     },
 
-    __renderStars: function () {
-        this.__stars.forEach( function ( _starfield ) {
+    renderStars() {
+        this.stars.forEach( ( _starfield ) => {
             canvas.ctx.drawImage(
                 _starfield.canvas,
                 0,
@@ -132,12 +132,12 @@ const map = {
             canvas.ctx.drawImage(
                 _starfield.canvas,
                 0,
-                _starfield.pos.y  - _starfield.canvas.height,
+                _starfield.pos.y - _starfield.canvas.height,
                 _starfield.canvas.width,
                 _starfield.canvas.height
             );
         } );
-    }
+    },
 };
 
 export default map;

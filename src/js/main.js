@@ -11,3 +11,5 @@ game.addBody( ui );
 game.addBody( map );
 game.addBody( player );
 // game.play();
+
+window.game = game;
