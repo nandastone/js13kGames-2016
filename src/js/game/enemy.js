@@ -19,8 +19,7 @@ export default class Enemy {
         this.frame = 0;
         this.isDead = false;
         this.deathFrames = 0;
-        this.shootFrame = _options.type.shootFrame;
-        this.shootCount = _options.type.shootCount;
+        this.shootFrames = _options.type.shootFrames;
     }
     static get TYPES() {
         return {
@@ -28,11 +27,11 @@ export default class Enemy {
                 width: 20,
                 height: 20,
                 hp: 100,
-                shootFrame: 50,
-                shootCount: 2,
+                shootFrames: [ 20, 120 ]
             },
         };
     }
+    // @todo Allow moving along path.
     static get PATTERNS() {
         return {
             STRAIGHT_DOWN: {
@@ -40,12 +39,12 @@ export default class Enemy {
             },
             DRIFT_RIGHT: {
                 0: { x: 0, y: 2 },
-                50: { x: 2, y: 2 },
+                50: { x: 1.5, y: 2 },
                 100: { x: 0, y: 2 },
             },
             DRIFT_LEFT: {
                 0: { x: 0, y: 2 },
-                50: { x: -2, y: 2 },
+                50: { x: -1.5, y: 2 },
                 100: { x: 0, y: 2 },
             },
         };
@@ -105,7 +104,7 @@ export default class Enemy {
                 }
             } );
 
-            if ( this.shootCount && !( this.frame % this.shootFrame ) ) {
+            if ( this.shootFrames.indexOf( this.frame ) !== -1 ) {
                 this.shoot();
             }
         }
@@ -144,8 +143,6 @@ export default class Enemy {
         }
     }
     shoot() {
-        this.shootCount -= 1;
-
         const b = new Bullet( {
             pos: {
                 x: this.pos.x + ( this.width / 2 ),
@@ -162,10 +159,10 @@ export default class Enemy {
         game.addBody( b );
     }
     getPatternStage() {
-        // @todo Improve performance of this loop.
         const stages = Object.keys( this.pattern ).reverse();
-        let speed = {};
+        let speed = { x: 0, y: 0 };
 
+        // @todo Improve readability of this loop.
         for ( let i = 0, l = stages.length; i < l; i++ ) {
             if ( this.frame >= stages[ i ] ) {
                 speed = this.pattern[ stages[ i ] ];

@@ -48,16 +48,16 @@ export default class Level {
                     {
                         distance: 400,
                         type: Enemy.TYPES.BASIC,
-                        pattern: Enemy.PATTERNS.STRAIGHT_DOWN,
+                        pattern: Enemy.PATTERNS.DRIFT_RIGHT,
                         pos: {
-                            x: ( map.width / 2 ) - ( Enemy.TYPES.BASIC.width / 2 ),
+                            x: 100,
                             y: -Enemy.TYPES.BASIC.height
                         }
                     },
                     {
-                        distance: 500,
+                        distance: 400,
                         type: Enemy.TYPES.BASIC,
-                        pattern: Enemy.PATTERNS.DRIFT_LEFT,
+                        pattern: Enemy.PATTERNS.DRIFT_RIGHT,
                         pos: {
                             x: 200,
                             y: -Enemy.TYPES.BASIC.height
